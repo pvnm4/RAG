@@ -1,0 +1,1563 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>RAG Roadmap Tracker</title>
+<style>
+:root{--bg:#fafaf8;--fg:#1d1d1b;--mut:#6b6b66;--card:#fff;--bd:#e3e2dc;--ac:#3b6fd4;--ok:#2e8b57;--code:#f0efe9;
+box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#161615;--fg:#ececea;--mut:#9a9a94;--card:#1f1f1d;--bd:#33332f;--ac:#7aa2f0;--ok:#5cc08a;--code:#2a2a27}}
+:root[data-theme="dark"]{--bg:#161615;--fg:#ececea;--mut:#9a9a94;--card:#1f1f1d;--bd:#33332f;--ac:#7aa2f0;--ok:#5cc08a;--code:#2a2a27}
+html{scroll-padding-top:calc(env(safe-area-inset-top,0px) + 70px)}
+body{margin:0;background:var(--bg);color:var(--fg);font:16px/1.55 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+.bar{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:var(--card);border-bottom:1px solid var(--bd);padding:10px 16px}
+.bar .row{max-width:860px;margin:auto;display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+.prog{flex:1;min-width:160px}
+.track{height:8px;background:var(--code);border-radius:99px;overflow:hidden}
+.fill{height:100%;width:0;background:var(--ok);transition:width .25s}
+.lbl{font-size:13px;color:var(--mut);margin-bottom:3px}
+button{font:inherit;font-size:13px;padding:6px 11px;border:1px solid var(--bd);background:var(--bg);color:var(--fg);border-radius:8px;cursor:pointer}
+button:hover{border-color:var(--ac)}
+main{max-width:860px;margin:auto;padding:16px}
+h1.title{font-size:26px;margin:.3em 0}
+.phase{background:var(--card);border:1px solid var(--bd);border-radius:12px;padding:6px 18px 14px;margin:18px 0}
+.phase h1{font-size:20px;display:flex;justify-content:space-between;gap:10px;align-items:baseline;margin:.6em 0 .3em}
+.pp{font-size:13px;font-weight:500;color:var(--mut);white-space:nowrap}
+h2{font-size:17px;margin:1.4em 0 .3em}h3{font-size:15px;margin:1.1em 0 .2em;color:var(--mut)}
+ul.cl{list-style:none;padding:0;margin:.3em 0}
+ul.cl li{margin:0}
+ul.cl label{display:flex;gap:10px;align-items:flex-start;padding:5px 6px;border-radius:7px;cursor:pointer}
+ul.cl label:hover{background:var(--code)}
+input[type=checkbox]{width:18px;height:18px;margin-top:3px;flex:none;accent-color:var(--ok);cursor:pointer}
+input:checked+span{color:var(--mut);text-decoration:line-through}
+blockquote{margin:.8em 0;padding:.5em 1em;border-left:3px solid var(--ac);background:var(--code);border-radius:0 8px 8px 0}
+pre{background:var(--code);padding:12px;border-radius:8px;overflow-x:auto;font-size:13px;line-height:1.4}
+code{background:var(--code);padding:1px 5px;border-radius:4px;font-size:.9em}
+.tw{overflow-x:auto}table{border-collapse:collapse;font-size:14px;width:100%}
+th,td{border:1px solid var(--bd);padding:6px 9px;text-align:left;vertical-align:top}th{background:var(--code)}
+hr{border:0;border-top:1px solid var(--bd);margin:18px 0}
+#hist{display:none;max-width:860px;margin:0 auto 40px;padding:0 16px}
+#hist.on{display:block}
+#hist .box{background:var(--card);border:1px solid var(--bd);border-radius:12px;padding:12px 16px}
+#hist li{font-size:14px;margin:4px 0;list-style:none}
+#hist ol,#hist ul{padding:0;margin:0}
+.t{color:var(--mut);font-size:12px;margin-right:6px}
+#note{font-size:12px;color:var(--mut);max-width:860px;margin:0 auto;padding:0 16px 8px}
+</style>
+</head>
+<body>
+<div class="bar"><div class="row">
+ <div class="prog"><div class="lbl" id="plbl">0 / 0 done</div><div class="track"><div class="fill" id="pfill"></div></div></div>
+ <button id="bhist">📜 History</button>
+ <button id="bdl">⬇ Save .md</button>
+ <button id="breset">Reset</button>
+</div></div>
+<div id="note"></div>
+<div id="hist"><div class="box"><strong>Click history</strong> <span class="t" id="hcount"></span><ol id="hlist"></ol></div></div>
+<main>
+<h1 class="title">RAG Roadmap</h1>
+<h3>From Basics → Working Pipeline → Advanced Techniques → Production-Grade RAG</h3>
+<blockquote><strong>Goal:</strong> Learn Retrieval-Augmented Generation deeply enough to <strong>build</strong> RAG systems that work on real, messy data, <strong>measure</strong> whether they work, and <strong>run</strong> them in production.<br><strong>Rule:</strong> Don't try to finish everything at once. Follow the phases in order, build something small in every phase, and mark things off as you go.</blockquote>
+<hr>
+<h2>🧭 How to Use This Roadmap</h2>
+<h3>The One-Topic Rule</h3>
+<ul class="cl">
+<li><label><input type="checkbox" data-i="13"><span>Pick <strong>ONE</strong> topic</span></label></li>
+<li><label><input type="checkbox" data-i="14"><span>Learn it for <strong>30–60 minutes</strong></span></label></li>
+<li><label><input type="checkbox" data-i="15"><span>Write a tiny explanation in your own words</span></label></li>
+<li><label><input type="checkbox" data-i="16"><span>Build or run <strong>ONE small experiment</strong> (a notebook cell counts)</span></label></li>
+<li><label><input type="checkbox" data-i="17"><span>Mark it complete</span></label></li>
+<li><label><input type="checkbox" data-i="18"><span>Move on</span></label></li>
+</ul>
+<h3>Your learning loop</h3>
+<pre>LEARN → EXPLAIN → BUILD → MEASURE → BREAK → IMPROVE</pre>
+<p>RAG is an <strong>engineering</strong> topic, not a theory topic. You only understand a technique when you've seen it <strong>fix a failure</strong> in your own pipeline.</p>
+<h3>Completion levels</h3>
+<ul class="cl">
+<li><label><input type="checkbox" data-i="30"><span>🟢 <strong>Know</strong> — I understand the concept</span></label></li>
+<li><label><input type="checkbox" data-i="31"><span>🟡 <strong>Explain</strong> — I can explain it without notes</span></label></li>
+<li><label><input type="checkbox" data-i="32"><span>🔵 <strong>Build</strong> — I've implemented it on real data</span></label></li>
+<li><label><input type="checkbox" data-i="33"><span>🟣 <strong>Production</strong> — I can discuss trade-offs, cost, latency, and failure modes</span></label></li>
+</ul>
+<h3>The most important rule of RAG</h3>
+<pre>Don&#x27;t add a technique because it&#x27;s popular.
+Add it because your EVALUATION showed a specific failure it fixes.</pre>
+<blockquote>Build the <strong>evaluation set early (Phase 12 basics can start in Phase 2)</strong>. Without it, every "improvement" is a guess.</blockquote>
+<hr>
+<h2>🗺️ The Big Picture</h2>
+<pre>                    OFFLINE (Ingestion)
+┌────────┐   ┌───────┐   ┌───────┐   ┌─────────┐   ┌──────────────┐
+│ Source │ → │ Parse │ → │ Chunk │ → │  Embed  │ → │ Vector Store │
+│  docs  │   │ clean │   │ +meta │   │         │   │ + keyword idx│
+└────────┘   └───────┘   └───────┘   └─────────┘   └──────┬───────┘
+                                                          │
+                    ONLINE (Query time)                   │
+┌───────┐   ┌─────────┐   ┌──────────┐   ┌────────┐       │
+│ Query │ → │ Rewrite │ → │ Retrieve │ ←─┴────────┴───────┘
+└───────┘   │ /route  │   │ (hybrid) │
+            └─────────┘   └────┬─────┘
+                               ↓
+                         ┌──────────┐   ┌──────────┐   ┌──────────┐
+                         │ Rerank   │ → │ Build    │ → │   LLM    │ → Answer
+                         │          │   │ context  │   │ + cites  │   + sources
+                         └──────────┘   └──────────┘   └──────────┘
+
+        EVALUATION + OBSERVABILITY + SECURITY wrap around everything</pre>
+<hr>
+<h2>⏱️ Suggested Timeline</h2>
+<div class="tw"><table><thead><tr><th>Stage</th><th>Phases</th><th>Rough time (≈1 hr/day)</th></tr></thead><tbody><tr><td>Foundations</td><td>0–1</td><td>1 week</td></tr><tr><td>Working RAG</td><td>2–7</td><td>3–4 weeks</td></tr><tr><td>Quality</td><td>8–10, 12</td><td>3 weeks</td></tr><tr><td>Advanced</td><td>11</td><td>3 weeks</td></tr><tr><td>Production</td><td>13–16</td><td>3–4 weeks</td></tr><tr><td>Mastery</td><td>17–22</td><td>ongoing</td></tr></tbody></table></div>
+<p>Don't treat this as a deadline. It's a pacing guide.</p>
+<hr>
+<section class="phase"><h1>PHASE 0 — Prerequisites<span class="pp"></span></h1>
+<blockquote>Goal: Make sure the basics aren't slowing you down.</blockquote>
+<h2>0.1 Python &amp; API Skills</h2>
+<ul class="cl">
+<li><label><input type="checkbox" data-i="92"><span>Python async / await</span></label></li>
+<li><label><input type="checkbox" data-i="93"><span>Type hints and Pydantic models</span></label></li>
+<li><label><input type="checkbox" data-i="94"><span>HTTP clients (<code>httpx</code>, <code>requests</code>)</span></label></li>
+<li><label><input type="checkbox" data-i="95"><span>FastAPI basics (routes, dependencies, streaming responses)</span></label></li>
+<li><label><input type="checkbox" data-i="96"><span>Environment variables and secrets</span></label></li>
+<li><label><input type="checkbox" data-i="97"><span>Working with JSON</span></label></li>
+<li><label><input type="checkbox" data-i="98"><span>Reading and writing files (PDF, HTML, Markdown, CSV)</span></label></li>
+<li><label><input type="checkbox" data-i="99"><span>Jupyter notebooks for experiments</span></label></li>
+<li><label><input type="checkbox" data-i="100"><span>Logging</span></label></li>
+</ul>
+<h2>0.2 Databases</h2>
+<ul class="cl">
+<li><label><input type="checkbox" data-i="104"><span>PostgreSQL basics</span></label></li>
+<li><label><input type="checkbox" data-i="105"><span>Indexes (why they exist)</span></label></li>
+<li><label><input type="checkbox" data-i="106"><span>Full-text search basics (<code>tsvector</code>)</span></label></li>
+<li><label><input type="checkbox" data-i="107"><span>JSONB columns</span></label></li>
+<li><label><input type="checkbox" data-i="108"><span>Connection pooling</span></label></li>
+</ul>
+<h2>0.3 Math You Actually Need (light)</h2>
+<ul class="cl">
+<li><label><input type="checkbox" data-i="112"><span>What a vector is</span></label></li>
+<li><label><input type="checkbox" data-i="113"><span>Dot product</span></label></li>
+<li><label><input type="checkbox" data-i="114"><span>Cosine similarity</span></label></li>
+<li><label><input type="checkbox" data-i="115"><span>Euclidean (L2) distance</span></label></li>
+<li><label><input type="checkbox" data-i="116"><span>Normalization (unit vectors)</span></label></li>
+<li><label><input type="checkbox" data-i="117"><span>High-dimensional space intuition (why "nearest" gets tricky)</span></label></li>
+</ul>
+<h3>Must be able to explain</h3>
+<ul class="cl">
+<li><label><input type="checkbox" data-i="121"><span>Why cosine similarity of normalized vectors = dot product</span></label></li>
+<li><label><input type="checkbox" data-i="122"><span>What "similar" means for two vectors</span></label></li>
+<li><label><input type="checkbox" data-i="123"><span>Why an exact nearest-neighbor search gets slow at scale</span></label></li>
+</ul>
+<h2>0.4 NLP Basics</h2>
+<ul class="cl">
+<li><label><input type="checkbox" data-i="127"><span>Tokens and tokenization</span></label></li>
+<li><label><input type="checkbox" data-i="128"><span>Words vs subword tokens</span></label></li>
+<li><label><input type="checkbox" data-i="129"><span>TF-IDF</span></label></li>
+<li><label><input type="checkbox" data-i="130"><span>BM25 (high-level idea)</span></label></li>
+<li><label><input type="checkbox" data-i="131"><span>Stemming / lemmatization</span></label></li>
+<li><label><input type="checkbox" data-i="132"><span>Stop words</span></label></li>
+<li><label><input type="checkbox" data-i="133"><span>Why keyword search and semantic search behave differently</span></label></li>
+</ul>
+<hr>
+</section>
+<section class="phase"><h1>PHASE 1 — LLM Basics for RAG<span class="pp"></span></h1>
+<blockquote>Goal: Understand the model you're feeding context into, and why RAG exists.</blockquote>
+<h2>1.1 How LLMs Work (practical level)</h2>
+<ul class="cl">
+<li><label><input type="checkbox" data-i="143"><span>Tokens</span></label></li>
+<li><label><input type="checkbox" data-i="144"><span>Context window</span></label></li>
+<li><label><input type="checkbox" data-i="145"><span>Input vs output tokens</span></label></li>
+<li><label><input type="checkbox" data-i="146"><span>Temperature</span></label></li>
+<li><label><input type="checkbox" data-i="147"><span>Top-p</span></label></li>
+<li><label><input type="checkbox" data-i="148"><span>Max output tokens</span></label></li>
+<li><label><input type="checkbox" data-i="149"><span>System prompt vs user prompt</span></label></li>
+<li><label><input type="checkbox" data-i="150"><span>Stateless API calls</span></label></li>
+<li><label><input type="checkbox" data-i="151"><span>Streaming responses</span></label></li>
+<li><label><input type="checkbox" data-i="152"><span>Structured outputs / JSON mode</span></label></li>
+<li><label><input type="checkbox" data-i="153"><span>Tool / function calling</span></label></li>
+<li><label><input type="checkbox" data-i="154"><span>Prompt caching</span></label></li>
+<li><label><input type="checkbox" data-i="155"><span>Token costs and latency</span></label></li>
+</ul>
+<h2>1.2 Why RAG Exists</h2>
+<ul class="cl">
+<li><label><input type="checkbox" data-i="159"><span>Knowledge cutoff</span></label></li>
+<li><label><input type="checkbox" data-i="160"><span>Hallucination</span></label></li>
+<li><label><input type="checkbox" data-i="161"><span>Private / company data</span></label></li>
+<li><label><input type="checkbox" data-i="162"><span>Data that changes frequently</span></label></li>
+<li><label><input type="checkbox" data-i="163"><span>Need for citations and traceability</span></label></li>
+<li><label><input type="checkbox" data-i="164"><span>Access control on data</span></label></li>
+</ul>
+<h2>1.3 RAG vs Alternatives</h2>
+<ul class="cl">
+<li><label><input type="checkbox" data-i="168"><span>RAG vs fine-tuning</span></label></li>
+<li><label><input type="checkbox" data-i="169"><span>RAG vs long-context ("just paste everything")</span></label></li>
+<li><label><input type="checkbox" data-i="170"><span>RAG vs prompt-only</span></label></li>
+<li><label><input type="checkbox" data-i="171"><span>RAG vs traditional search</span></label></li>
+<li><label><input type="checkbox" data-i="172"><span>RAG vs text-to-SQL / structured query</span></label></li>
+<li><label><input type="checkbox" data-i="173"><span>When to combine them</span></label></li>
+</ul>
+<pre>Fine-tuning  → changes HOW the model behaves / writes
+RAG          → changes WHAT the model knows at answer time
+Long context → works for small corpora, costs more per query</pre>
+<h3>Must be able to answer</h3>
+<ul class="cl">
+<li><label><input type="checkbox" data-i="183"><span>When is RAG the wrong choice?</span></label></li>
+<li><label><input type="checkbox" data-i="184"><span>Why not just fine-tune on our documents?</span></label></li>
+<li><label><input type="checkbox" data-i="185"><span>Why not just put all documents in the context window?</span></label></li>
+<li><label><input type="checkbox" data-i="186"><span>Does RAG eliminate hallucinations? (No. Why not?)</span></label></li>
+</ul>
+<h3>Practice</h3>
+<ul class="cl">
+<li><label><input type="checkbox" data-i="190"><span>Ask an LLM a question about a private doc <strong>without</strong> RAG → observe the failure</span></label></li>
+<li><label><input type="checkbox" data-i="191"><span>Paste the doc in the prompt manually → observe the improvement</span></label></li>
+<li><label><input type="checkbox" data-i="192"><span>Write down what "automating that paste step" would require</span></label></li>
+</ul>
+<hr>
+</section>
+<section class="phase"><h1>PHASE 2 — Naive RAG (Your First Working Pipeline)<span class="pp"></span></h1>
+<blockquote>Goal: Build the simplest possible end-to-end RAG. Ugly is fine.</blockquote>
+<h2>2.1 The Pipeline</h2>
+<ul class="cl">
+<li><label><input type="checkbox" data-i="202"><span>Load documents</span></label></li>
+<li><label><input type="checkbox" data-i="203"><span>Split into chunks</span></label></li>
+<li><label><input type="checkbox" data-i="204"><span>Embed chunks</span></label></li>
+<li><label><input type="checkbox" data-i="205"><span>Store vectors</span></label></li>
+<li><label><input type="checkbox" data-i="206"><span>Embed the query</span></label></li>
+<li><label><input type="checkbox" data-i="207"><span>Retrieve top-k similar chunks</span></label></li>
+<li><label><input type="checkbox" data-i="208"><span>Stuff chunks into a prompt</span></label></li>
+<li><label><input type="checkbox" data-i="209"><span>Generate an answer</span></label></li>
+</ul>
+<pre>INDEX:  doc → chunks → embeddings → vector store
+QUERY:  question → embedding → top-k chunks → prompt → LLM → answer</pre>
+<h2>2.2 Build It</h2>
+<ul class="cl">
+<li><label><input type="checkbox" data-i="218"><span>Choose 5–20 documents you actually care about</span></label></li>
+<li><label><input type="checkbox" data-i="219"><span>Use a simple local vector store (Chroma / FAISS / pgvector)</span></label></li>
+<li><label><input type="checkbox" data-i="220"><span>Build it <strong>without</strong> a framework first (raw SDK calls)</span></label></li>
+<li><label><input type="checkbox" data-i="221"><span>Then rebuild it with LlamaIndex or LangChain and compare</span></label></li>
+<li><label><input type="checkbox" data-i="222"><span>Print the retrieved chunks for every query</span></label></li>
+</ul>
+<h2>2.3 Create Your First Evaluation Set (start now)</h2>
+<ul class="cl">
+<li><label><input type="checkbox" data-i="226"><span>Write 20–30 real questions</span></label></li>
+<li><label><input type="checkbox" data-i="227"><span>For each, write the ideal answer</span></label></li>
+<li><label><input type="checkbox" data-i="228"><span>For each, note which document/chunk contains the answer</span></label></li>
+<li><label><input type="checkbox" data-i="229"><span>Include some questions that should get "I don't know"</span></label></li>
+<li><label><input type="checkbox" data-i="230"><span>Include some multi-part questions</span></label></li>
+<li><label><input type="checkbox" data-i="231"><span>Include some questions with exact terms (IDs, error codes, names)</span></label></li>
+</ul>
+<h3>Must be able to explain</h3>
+<ul class="cl">
+<li><label><input type="checkbox" data-i="235"><span>What each stage of the pipeline does</span></label></li>
+<li><label><input type="checkbox" data-i="236"><span>Why the answer is only as good as the retrieved chunks</span></label></li>
+<li><label><input type="checkbox" data-i="237"><span>The two failure types: <strong>retrieval failure</strong> vs <strong>generation failure</strong></span></label></li>
+</ul>
+<blockquote>🔑 Debugging habit: when an answer is wrong, <strong>look at the retrieved chunks first</strong>. Most RAG bugs are retrieval bugs.</blockquote>
+<hr>
+</section>
+<section class="phase"><h1>PHASE 3 — Document Ingestion &amp; Parsing<span class="pp"></span></h1>
+<blockquote>Goal: Get clean, structured text out of messy real-world files. This is where most production RAG quality is won or lost.</blockquote>
+<h2>3.1 Source Types</h2>
+<ul class="cl">
+<li><label><input type="checkbox" data-i="249"><span>Plain text / Markdown</span></label></li>
+<li><label><input type="checkbox" data-i="250"><span>HTML / web pages</span></label></li>
+<li><label><input type="checkbox" data-i="251"><span>PDFs (digital)</span></label></li>
+<li><label><input type="checkbox" data-i="252"><span>PDFs (scanned)</span></label></li>
+<li><label><input type="checkbox" data-i="253"><span>Word / PowerPoint / Excel</span></label></li>
+<li><label><input type="checkbox" data-i="254"><span>Emails</span></label></li>
+<li><label><input type="checkbox" data-i="255"><span>Confluence / Notion / wiki pages</span></label></li>
+<li><label><input type="checkbox" data-i="256"><span>Slack / chat exports</span></label></li>
+<li><label><input type="checkbox" data-i="257"><span>Code repositories</span></label></li>
+<li><label><input type="checkbox" data-i="258"><span>Databases / APIs</span></label></li>
+<li><label><input type="checkbox" data-i="259"><span>Images, diagrams, charts</span></label></li>
+<li><label><input type="checkbox" data-i="260"><span>Audio / video (via transcripts)</span></label></li>
+</ul>
+<h2>3.2 Parsing Problems</h2>
+<ul class="cl">
+<li><label><input type="checkbox" data-i="264"><span>Multi-column layouts</span></label></li>
+<li><label><input type="checkbox" data-i="265"><span>Headers and footers repeating on every page</span></label></li>
+<li><label><input type="checkbox" data-i="266"><span>Tables (the hardest one)</span></label></li>
+<li><label><input type="checkbox" data-i="267"><span>Figures and captions</span></label></li>
+<li><label><input type="checkbox" data-i="268"><span>Footnotes</span></label></li>
+<li><label><input type="checkbox" data-i="269"><span>Reading order</span></label></li>
+<li><label><input type="checkbox" data-i="270"><span>Scanned pages → OCR</span></label></li>
+<li><label><input type="checkbox" data-i="271"><span>Broken Unicode / encoding</span></label></li>
+<li><label><input type="checkbox" data-i="272"><span>Boilerplate (nav bars, cookie banners)</span></label></li>
+<li><label><input type="checkbox" data-i="273"><span>Duplicate documents</span></label></li>
+</ul>
+<h2>3.3 Tools to Try</h2>
+<ul class="cl">
+<li><label><input type="checkbox" data-i="277"><span>Basic PDF text extraction (PyMuPDF / pdfplumber)</span></label></li>
+<li><label><input type="checkbox" data-i="278"><span>Layout-aware parsers (e.g., Docling, Unstructured, LlamaParse-style tools)</span></label></li>
+<li><label><input type="checkbox" data-i="279"><span>OCR (Tesseract or cloud OCR)</span></label></li>
+<li><label><input type="checkbox" data-i="280"><span>Vision-model based parsing (send page image to a multimodal LLM)</span></label></li>
+<li><label><input type="checkbox" data-i="281"><span>HTML cleaners (trafilatura, readability-style)</span></label></li>
+</ul>
+<h2>3.4 Metadata (extremely important)</h2>
+<ul class="cl">
+<li><label><input type="checkbox" data-i="285"><span>Source / file name / URL</span></label></li>
+<li><label><input type="checkbox" data-i="286"><span>Title</span></label></li>
+<li><label><input type="checkbox" data-i="287"><span>Section heading path (<code>Chapter &gt; Section &gt; Subsection</code>)</span></label></li>
+<li><label><input type="checkbox" data-i="288"><span>Page number</span></label></li>
+<li><label><input type="checkbox" data-i="289"><span>Author</span></label></li>
+<li><label><input type="checkbox" data-i="290"><span>Created / updated date</span></label></li>
+<li><label><input type="checkbox" data-i="291"><span>Document type</span></label></li>
+<li><label><input type="checkbox" data-i="292"><span>Language</span></label></li>
+<li><label><input type="checkbox" data-i="293"><span>Access permissions / tenant ID</span></label></li>
+<li><label><input type="checkbox" data-i="294"><span>Version</span></label></li>
+</ul>
+<h3>Practice</h3>
+<ul class="cl">
+<li><label><input type="checkbox" data-i="298"><span>Parse the same PDF with 2–3 parsers and compare the output</span></label></li>
+<li><label><input type="checkbox" data-i="299"><span>Parse a PDF containing a table and check whether the table is still readable</span></label></li>
+<li><label><input type="checkbox" data-i="300"><span>Store metadata with every chunk</span></label></li>
+<li><label><input type="checkbox" data-i="301"><span>Show citations (file + page) in your answers</span></label></li>
+</ul>
+<hr>
+</section>
+<section class="phase"><h1>PHASE 4 — Chunking<span class="pp"></span></h1>
+<blockquote>Goal: Split documents so each chunk is <strong>retrievable</strong>, <strong>self-contained</strong>, and <strong>useful to the LLM</strong>.</blockquote>
+<h2>4.1 Why Chunking Matters</h2>
+<ul class="cl">
+<li><label><input type="checkbox" data-i="311"><span>Embedding models have input limits</span></label></li>
+<li><label><input type="checkbox" data-i="312"><span>One embedding per chunk — too big = blurry meaning, too small = no context</span></label></li>
+<li><label><input type="checkbox" data-i="313"><span>Chunk size affects retrieval precision, recall, cost, and answer quality</span></label></li>
+</ul>
+<pre>Too small → precise match, but missing context
+Too big   → context-rich, but diluted embedding + wasted tokens</pre>
+<h2>4.2 Chunking Strategies</h2>
+<ul class="cl">
+<li><label><input type="checkbox" data-i="322"><span>Fixed-size chunking (characters / tokens)</span></label></li>
+<li><label><input type="checkbox" data-i="323"><span>Chunk overlap</span></label></li>
+<li><label><input type="checkbox" data-i="324"><span>Recursive character splitting</span></label></li>
+<li><label><input type="checkbox" data-i="325"><span>Sentence-based chunking</span></label></li>
+<li><label><input type="checkbox" data-i="326"><span>Paragraph-based chunking</span></label></li>
+<li><label><input type="checkbox" data-i="327"><span>Structure-aware chunking (Markdown headers, HTML tags, sections)</span></label></li>
+<li><label><input type="checkbox" data-i="328"><span>Semantic chunking (split where topic changes)</span></label></li>
+<li><label><input type="checkbox" data-i="329"><span>Code-aware chunking (functions / classes)</span></label></li>
+<li><label><input type="checkbox" data-i="330"><span>Table-aware chunking (keep tables whole, or row-wise with headers)</span></label></li>
+<li><label><input type="checkbox" data-i="331"><span>Sliding window</span></label></li>
+<li><label><input type="checkbox" data-i="332"><span>LLM-based / agentic chunking</span></label></li>
+<li><label><input type="checkbox" data-i="333"><span>Hierarchical chunking (small chunks linked to larger parents)</span></label></li>
+</ul>
+<h2>4.3 Enriching Chunks</h2>
+<ul class="cl">
+<li><label><input type="checkbox" data-i="337"><span>Prepend document title / section path to each chunk</span></label></li>
+<li><label><input type="checkbox" data-i="338"><span>Prepend a short LLM-generated context summary (see <em>Contextual Retrieval</em>, Phase 11)</span></label></li>
+<li><label><input type="checkbox" data-i="339"><span>Attach metadata</span></label></li>
+<li><label><input type="checkbox" data-i="340"><span>Generate hypothetical questions per chunk</span></label></li>
+<li><label><input type="checkbox" data-i="341"><span>Store a separate summary per chunk or document</span></label></li>
+</ul>
+<h2>4.4 Experiments</h2>
+<ul class="cl">
+<li><label><input type="checkbox" data-i="345"><span>Compare chunk sizes: 128 / 256 / 512 / 1024 tokens</span></label></li>
+<li><label><input type="checkbox" data-i="346"><span>Compare overlap: 0% / 10% / 20%</span></label></li>
+<li><label><input type="checkbox" data-i="347"><span>Compare fixed vs structure-aware chunking</span></label></li>
+<li><label><input type="checkbox" data-i="348"><span>Measure retrieval recall on your eval set for each variant</span></label></li>
+</ul>
+<h3>Must be able to answer</h3>
+<ul class="cl">
+<li><label><input type="checkbox" data-i="352"><span>How do I choose a chunk size?</span></label></li>
+<li><label><input type="checkbox" data-i="353"><span>Why is there no universal best chunk size?</span></label></li>
+<li><label><input type="checkbox" data-i="354"><span>What breaks when a chunk splits mid-table or mid-sentence?</span></label></li>
+<li><label><input type="checkbox" data-i="355"><span>Why add the section heading to each chunk?</span></label></li>
+</ul>
+<hr>
+</section>
+<section class="phase"><h1>PHASE 5 — Embeddings<span class="pp"></span></h1>
+<blockquote>Goal: Understand how text becomes searchable vectors and how to choose a model.</blockquote>
+<h2>5.1 Concepts</h2>
+<ul class="cl">
+<li><label><input type="checkbox" data-i="365"><span>What an embedding is</span></label></li>
+<li><label><input type="checkbox" data-i="366"><span>Embedding dimensions</span></label></li>
+<li><label><input type="checkbox" data-i="367"><span>Semantic similarity</span></label></li>
+<li><label><input type="checkbox" data-i="368"><span>Bi-encoder vs cross-encoder</span></label></li>
+<li><label><input type="checkbox" data-i="369"><span>Symmetric vs asymmetric search (short query vs long document)</span></label></li>
+<li><label><input type="checkbox" data-i="370"><span>Query vs document prefixes / instructions (model-specific)</span></label></li>
+<li><label><input type="checkbox" data-i="371"><span>Normalization</span></label></li>
+<li><label><input type="checkbox" data-i="372"><span>Max input length and truncation</span></label></li>
+</ul>
+<h2>5.2 Choosing a Model</h2>
+<ul class="cl">
+<li><label><input type="checkbox" data-i="376"><span>Hosted API embeddings vs open-source models</span></label></li>
+<li><label><input type="checkbox" data-i="377"><span>Multilingual support</span></label></li>
+<li><label><input type="checkbox" data-i="378"><span>Domain fit (legal, medical, code, finance)</span></label></li>
+<li><label><input type="checkbox" data-i="379"><span>Dimension size vs storage cost</span></label></li>
+<li><label><input type="checkbox" data-i="380"><span>Latency and throughput</span></label></li>
+<li><label><input type="checkbox" data-i="381"><span>Cost per million tokens</span></label></li>
+<li><label><input type="checkbox" data-i="382"><span>Benchmark awareness (MTEB) — and why to trust <strong>your own eval</strong> more</span></label></li>
+<li><label><input type="checkbox" data-i="383"><span>Matryoshka embeddings (truncatable dimensions)</span></label></li>
+<li><label><input type="checkbox" data-i="384"><span>Quantized embeddings (int8 / binary) to save memory</span></label></li>
+</ul>
+<h2>5.3 Operational Concerns</h2>
+<ul class="cl">
+<li><label><input type="checkbox" data-i="388"><span>Batching embedding requests</span></label></li>
+<li><label><input type="checkbox" data-i="389"><span>Rate limits and retries</span></label></li>
+<li><label><input type="checkbox" data-i="390"><span>Caching embeddings</span></label></li>
+<li><label><input type="checkbox" data-i="391"><span><strong>Re-embedding when you change models</strong> (everything must be re-indexed)</span></label></li>
+<li><label><input type="checkbox" data-i="392"><span>Storing the model name/version with the vectors</span></label></li>
+<li><label><input type="checkbox" data-i="393"><span>Keeping query and document models identical</span></label></li>
+</ul>
+<h2>5.4 Fine-tuning Embeddings (advanced)</h2>
+<ul class="cl">
+<li><label><input type="checkbox" data-i="397"><span>When generic embeddings underperform on your domain</span></label></li>
+<li><label><input type="checkbox" data-i="398"><span>Building training pairs (query, relevant chunk)</span></label></li>
+<li><label><input type="checkbox" data-i="399"><span>Hard negatives</span></label></li>
+<li><label><input type="checkbox" data-i="400"><span>Contrastive learning at a high level</span></label></li>
+<li><label><input type="checkbox" data-i="401"><span>Measuring the gain before adopting</span></label></li>
+</ul>
+<h3>Practice</h3>
+<ul class="cl">
+<li><label><input type="checkbox" data-i="405"><span>Embed 100 chunks with 2 different models; compare retrieval on your eval set</span></label></li>
+<li><label><input type="checkbox" data-i="406"><span>Visualize embeddings (UMAP / t-SNE) to see clusters</span></label></li>
+<li><label><input type="checkbox" data-i="407"><span>Find a query where embeddings fail (exact IDs, negation, numbers)</span></label></li>
+</ul>
+<hr>
+</section>
+<section class="phase"><h1>PHASE 6 — Vector Databases &amp; Indexing<span class="pp"></span></h1>
+<blockquote>Goal: Understand how similarity search works at scale and which store to choose.</blockquote>
+<h2>6.1 Concepts</h2>
+<ul class="cl">
+<li><label><input type="checkbox" data-i="417"><span>Exact nearest neighbor (brute force / flat)</span></label></li>
+<li><label><input type="checkbox" data-i="418"><span>Approximate nearest neighbor (ANN)</span></label></li>
+<li><label><input type="checkbox" data-i="419"><span>Recall vs speed vs memory trade-off</span></label></li>
+<li><label><input type="checkbox" data-i="420"><span>Distance metrics: cosine, dot product, L2</span></label></li>
+<li><label><input type="checkbox" data-i="421"><span>Metadata filtering</span></label></li>
+<li><label><input type="checkbox" data-i="422"><span>Collections / namespaces / tenants</span></label></li>
+</ul>
+<h2>6.2 Index Types</h2>
+<ul class="cl">
+<li><label><input type="checkbox" data-i="426"><span>Flat index</span></label></li>
+<li><label><input type="checkbox" data-i="427"><span>IVF (inverted file)</span></label></li>
+<li><label><input type="checkbox" data-i="428"><span>HNSW (graph-based) — know this one well</span></label></li>
+<li><label><input type="checkbox" data-i="429"><span>PQ (product quantization)</span></label></li>
+<li><label><input type="checkbox" data-i="430"><span>Scalar / binary quantization</span></label></li>
+<li><label><input type="checkbox" data-i="431"><span>DiskANN-style disk-based indexes</span></label></li>
+</ul>
+<h3>HNSW parameters to understand</h3>
+<ul class="cl">
+<li><label><input type="checkbox" data-i="435"><span><code>M</code></span></label></li>
+<li><label><input type="checkbox" data-i="436"><span><code>ef_construction</code></span></label></li>
+<li><label><input type="checkbox" data-i="437"><span><code>ef_search</code></span></label></li>
+<li><label><input type="checkbox" data-i="438"><span>Effect on recall, latency, memory</span></label></li>
+</ul>
+<h2>6.3 Vector Stores</h2>
+<ul class="cl">
+<li><label><input type="checkbox" data-i="442"><span>pgvector (PostgreSQL) — natural fit if you already use Postgres</span></label></li>
+<li><label><input type="checkbox" data-i="443"><span>FAISS (library)</span></label></li>
+<li><label><input type="checkbox" data-i="444"><span>Chroma (easy local dev)</span></label></li>
+<li><label><input type="checkbox" data-i="445"><span>Qdrant</span></label></li>
+<li><label><input type="checkbox" data-i="446"><span>Weaviate</span></label></li>
+<li><label><input type="checkbox" data-i="447"><span>Milvus</span></label></li>
+<li><label><input type="checkbox" data-i="448"><span>Pinecone</span></label></li>
+<li><label><input type="checkbox" data-i="449"><span>OpenSearch / Elasticsearch (vector + keyword)</span></label></li>
+<li><label><input type="checkbox" data-i="450"><span>Redis vector search</span></label></li>
+<li><label><input type="checkbox" data-i="451"><span>MongoDB Atlas vector search</span></label></li>
+</ul>
+<h2>6.4 Filtering &amp; Multi-Tenancy</h2>
+<ul class="cl">
+<li><label><input type="checkbox" data-i="455"><span>Pre-filtering vs post-filtering</span></label></li>
+<li><label><input type="checkbox" data-i="456"><span>Why post-filtering can return too few results</span></label></li>
+<li><label><input type="checkbox" data-i="457"><span>Filtering by tenant, date, doc type, permissions</span></label></li>
+<li><label><input type="checkbox" data-i="458"><span>Per-tenant collections vs shared collection + filter</span></label></li>
+</ul>
+<h2>6.5 Operations</h2>
+<ul class="cl">
+<li><label><input type="checkbox" data-i="462"><span>Index build time</span></label></li>
+<li><label><input type="checkbox" data-i="463"><span>Memory footprint estimation (<code>vectors × dims × bytes</code>)</span></label></li>
+<li><label><input type="checkbox" data-i="464"><span>Updates and deletes</span></label></li>
+<li><label><input type="checkbox" data-i="465"><span>Backups</span></label></li>
+<li><label><input type="checkbox" data-i="466"><span>Sharding and replication</span></label></li>
+<li><label><input type="checkbox" data-i="467"><span>Cost at scale</span></label></li>
+</ul>
+<h3>Must be able to answer</h3>
+<ul class="cl">
+<li><label><input type="checkbox" data-i="471"><span>Why not just use brute-force search?</span></label></li>
+<li><label><input type="checkbox" data-i="472"><span>What does HNSW trade away for speed?</span></label></li>
+<li><label><input type="checkbox" data-i="473"><span>pgvector vs a dedicated vector DB — when does each win?</span></label></li>
+<li><label><input type="checkbox" data-i="474"><span>How much RAM do 10M vectors of 1024 dimensions need?</span></label></li>
+</ul>
+<h3>Practice</h3>
+<ul class="cl">
+<li><label><input type="checkbox" data-i="478"><span>Store chunks in pgvector with metadata columns</span></label></li>
+<li><label><input type="checkbox" data-i="479"><span>Add an HNSW index and compare query time before/after</span></label></li>
+<li><label><input type="checkbox" data-i="480"><span>Run a filtered vector query and inspect the query plan</span></label></li>
+</ul>
+<hr>
+</section>
+<section class="phase"><h1>PHASE 7 — Retrieval<span class="pp"></span></h1>
+<blockquote>Goal: Get the right chunks into the top results. This is the heart of RAG.</blockquote>
+<h2>7.1 Basic Retrieval</h2>
+<ul class="cl">
+<li><label><input type="checkbox" data-i="490"><span>Top-k similarity search</span></label></li>
+<li><label><input type="checkbox" data-i="491"><span>Choosing <code>k</code></span></label></li>
+<li><label><input type="checkbox" data-i="492"><span>Similarity score thresholds</span></label></li>
+<li><label><input type="checkbox" data-i="493"><span>"No relevant results" handling</span></label></li>
+<li><label><input type="checkbox" data-i="494"><span>Maximal Marginal Relevance (MMR) for diversity</span></label></li>
+<li><label><input type="checkbox" data-i="495"><span>Deduplicating near-identical chunks</span></label></li>
+</ul>
+<h2>7.2 Keyword (Sparse) Retrieval</h2>
+<ul class="cl">
+<li><label><input type="checkbox" data-i="499"><span>Inverted index</span></label></li>
+<li><label><input type="checkbox" data-i="500"><span>BM25</span></label></li>
+<li><label><input type="checkbox" data-i="501"><span>Why BM25 wins on exact terms (IDs, error codes, names, acronyms)</span></label></li>
+<li><label><input type="checkbox" data-i="502"><span>Learned sparse retrieval (SPLADE-style) — awareness only</span></label></li>
+</ul>
+<h2>7.3 Hybrid Search (production standard)</h2>
+<ul class="cl">
+<li><label><input type="checkbox" data-i="506"><span>Dense + sparse together</span></label></li>
+<li><label><input type="checkbox" data-i="507"><span>Reciprocal Rank Fusion (RRF)</span></label></li>
+<li><label><input type="checkbox" data-i="508"><span>Weighted score fusion</span></label></li>
+<li><label><input type="checkbox" data-i="509"><span>Score normalization problems</span></label></li>
+<li><label><input type="checkbox" data-i="510"><span>When hybrid beats pure vector search</span></label></li>
+</ul>
+<pre>Query → ┬→ Dense retrieval  (top 50) ─┐
+        └→ BM25 retrieval   (top 50) ─┴→ Fuse (RRF) → top 20 → Rerank → top 5</pre>
+<h2>7.4 Metadata &amp; Structured Filters</h2>
+<ul class="cl">
+<li><label><input type="checkbox" data-i="519"><span>Date filters ("latest", "last quarter")</span></label></li>
+<li><label><input type="checkbox" data-i="520"><span>Source / department filters</span></label></li>
+<li><label><input type="checkbox" data-i="521"><span>Permission filters</span></label></li>
+<li><label><input type="checkbox" data-i="522"><span>Self-querying retrieval (LLM converts the question into a filter + query)</span></label></li>
+</ul>
+<h2>7.5 Retrieval Metrics (start measuring)</h2>
+<ul class="cl">
+<li><label><input type="checkbox" data-i="526"><span>Recall@k</span></label></li>
+<li><label><input type="checkbox" data-i="527"><span>Precision@k</span></label></li>
+<li><label><input type="checkbox" data-i="528"><span>MRR</span></label></li>
+<li><label><input type="checkbox" data-i="529"><span>nDCG</span></label></li>
+<li><label><input type="checkbox" data-i="530"><span>Hit rate</span></label></li>
+</ul>
+<h3>Practice</h3>
+<ul class="cl">
+<li><label><input type="checkbox" data-i="534"><span>Implement BM25 only, vector only, and hybrid; compare on your eval set</span></label></li>
+<li><label><input type="checkbox" data-i="535"><span>Find 5 queries where vector search fails and BM25 succeeds</span></label></li>
+<li><label><input type="checkbox" data-i="536"><span>Find 5 queries where BM25 fails and vector search succeeds</span></label></li>
+</ul>
+<hr>
+</section>
+<section class="phase"><h1>PHASE 8 — Reranking<span class="pp"></span></h1>
+<blockquote>Goal: Retrieve broadly (high recall), then reorder precisely (high precision).</blockquote>
+<h2>8.1 Why Rerank</h2>
+<ul class="cl">
+<li><label><input type="checkbox" data-i="546"><span>Bi-encoder retrieval is fast but coarse</span></label></li>
+<li><label><input type="checkbox" data-i="547"><span>Cross-encoders read query + chunk <strong>together</strong> → more accurate</span></label></li>
+<li><label><input type="checkbox" data-i="548"><span>Too-slow-to-run-on-everything, fine for top 20–100</span></label></li>
+</ul>
+<pre>Retrieve 50  →  Rerank  →  Keep best 5
+(cheap, recall)   (expensive, precision)</pre>
+<h2>8.2 Reranker Types</h2>
+<ul class="cl">
+<li><label><input type="checkbox" data-i="557"><span>Cross-encoder rerankers (open-source)</span></label></li>
+<li><label><input type="checkbox" data-i="558"><span>Hosted rerank APIs</span></label></li>
+<li><label><input type="checkbox" data-i="559"><span>LLM-as-reranker (listwise / pointwise)</span></label></li>
+<li><label><input type="checkbox" data-i="560"><span>Late-interaction models (ColBERT-style)</span></label></li>
+<li><label><input type="checkbox" data-i="561"><span>Learning-to-rank (awareness)</span></label></li>
+</ul>
+<h2>8.3 Practical Concerns</h2>
+<ul class="cl">
+<li><label><input type="checkbox" data-i="565"><span>Latency added by reranking</span></label></li>
+<li><label><input type="checkbox" data-i="566"><span>How many candidates to rerank</span></label></li>
+<li><label><input type="checkbox" data-i="567"><span>How many to keep after reranking</span></label></li>
+<li><label><input type="checkbox" data-i="568"><span>Max token length of the reranker</span></label></li>
+<li><label><input type="checkbox" data-i="569"><span>Cost per query</span></label></li>
+<li><label><input type="checkbox" data-i="570"><span>Combining rerank score with metadata (recency boost)</span></label></li>
+</ul>
+<h3>Practice</h3>
+<ul class="cl">
+<li><label><input type="checkbox" data-i="574"><span>Add a reranker to your pipeline</span></label></li>
+<li><label><input type="checkbox" data-i="575"><span>Measure the change in Recall@5 / nDCG</span></label></li>
+<li><label><input type="checkbox" data-i="576"><span>Measure the added latency</span></label></li>
+<li><label><input type="checkbox" data-i="577"><span>Decide: is it worth it for your use case?</span></label></li>
+</ul>
+<hr>
+</section>
+<section class="phase"><h1>PHASE 9 — Query Understanding &amp; Transformation<span class="pp"></span></h1>
+<blockquote>Goal: Fix the fact that users ask bad, vague, or complex questions.</blockquote>
+<h2>9.1 Problems With Raw Queries</h2>
+<ul class="cl">
+<li><label><input type="checkbox" data-i="587"><span>Too short ("refund policy?")</span></label></li>
+<li><label><input type="checkbox" data-i="588"><span>Ambiguous pronouns in chat ("what about the second one?")</span></label></li>
+<li><label><input type="checkbox" data-i="589"><span>Multiple questions in one</span></label></li>
+<li><label><input type="checkbox" data-i="590"><span>Different vocabulary than the documents</span></label></li>
+<li><label><input type="checkbox" data-i="591"><span>Typos</span></label></li>
+<li><label><input type="checkbox" data-i="592"><span>Questions needing several documents</span></label></li>
+</ul>
+<h2>9.2 Techniques</h2>
+<ul class="cl">
+<li><label><input type="checkbox" data-i="596"><span>Query rewriting / normalization</span></label></li>
+<li><label><input type="checkbox" data-i="597"><span>Conversation-aware (standalone) query rewriting</span></label></li>
+<li><label><input type="checkbox" data-i="598"><span>Multi-query generation (several rephrasings, merge results)</span></label></li>
+<li><label><input type="checkbox" data-i="599"><span>Query decomposition (split into sub-questions)</span></label></li>
+<li><label><input type="checkbox" data-i="600"><span>Step-back prompting (ask a more general question first)</span></label></li>
+<li><label><input type="checkbox" data-i="601"><span>HyDE (embed a hypothetical answer instead of the question)</span></label></li>
+<li><label><input type="checkbox" data-i="602"><span>Query expansion (synonyms, acronyms)</span></label></li>
+<li><label><input type="checkbox" data-i="603"><span>Query routing (choose which index / tool to use)</span></label></li>
+<li><label><input type="checkbox" data-i="604"><span>Intent classification (chitchat vs retrieval vs action)</span></label></li>
+<li><label><input type="checkbox" data-i="605"><span>Self-querying (extract filters)</span></label></li>
+</ul>
+<h2>9.3 Routing</h2>
+<ul class="cl">
+<li><label><input type="checkbox" data-i="609"><span>Route to different indexes (docs / tickets / code)</span></label></li>
+<li><label><input type="checkbox" data-i="610"><span>Route to text-to-SQL for structured questions</span></label></li>
+<li><label><input type="checkbox" data-i="611"><span>Route to web search for fresh facts</span></label></li>
+<li><label><input type="checkbox" data-i="612"><span>Route to "no retrieval needed"</span></label></li>
+<li><label><input type="checkbox" data-i="613"><span>Fallback behavior</span></label></li>
+</ul>
+<h3>Practice</h3>
+<ul class="cl">
+<li><label><input type="checkbox" data-i="617"><span>Build a chat RAG that correctly handles follow-up questions</span></label></li>
+<li><label><input type="checkbox" data-i="618"><span>Add multi-query and measure the recall gain vs the extra cost</span></label></li>
+<li><label><input type="checkbox" data-i="619"><span>Add a router with 2–3 destinations</span></label></li>
+</ul>
+<hr>
+</section>
+<section class="phase"><h1>PHASE 10 — Context Building &amp; Generation<span class="pp"></span></h1>
+<blockquote>Goal: Turn retrieved chunks into <strong>grounded, trustworthy answers</strong>.</blockquote>
+<h2>10.1 Context Assembly</h2>
+<ul class="cl">
+<li><label><input type="checkbox" data-i="629"><span>Ordering chunks (by score vs by document order)</span></label></li>
+<li><label><input type="checkbox" data-i="630"><span>The "lost in the middle" effect</span></label></li>
+<li><label><input type="checkbox" data-i="631"><span>Token budgeting</span></label></li>
+<li><label><input type="checkbox" data-i="632"><span>Merging adjacent chunks</span></label></li>
+<li><label><input type="checkbox" data-i="633"><span>Deduplication</span></label></li>
+<li><label><input type="checkbox" data-i="634"><span>Including metadata in the prompt (source, date)</span></label></li>
+<li><label><input type="checkbox" data-i="635"><span>Context compression / summarization</span></label></li>
+<li><label><input type="checkbox" data-i="636"><span>Neighbor-chunk expansion (fetch the chunks before and after)</span></label></li>
+</ul>
+<h2>10.2 Prompt Design for RAG</h2>
+<ul class="cl">
+<li><label><input type="checkbox" data-i="640"><span>Clear instructions: "answer only from the provided context"</span></label></li>
+<li><label><input type="checkbox" data-i="641"><span>"If the answer isn't in the context, say you don't know"</span></label></li>
+<li><label><input type="checkbox" data-i="642"><span>Delimiting context clearly (XML-style tags)</span></label></li>
+<li><label><input type="checkbox" data-i="643"><span>Citation instructions (<code>[1]</code>, <code>[2]</code>)</span></label></li>
+<li><label><input type="checkbox" data-i="644"><span>Answer format (bullets, JSON, steps)</span></label></li>
+<li><label><input type="checkbox" data-i="645"><span>Handling conflicting sources</span></label></li>
+<li><label><input type="checkbox" data-i="646"><span>Handling outdated sources</span></label></li>
+<li><label><input type="checkbox" data-i="647"><span>Tone and length control</span></label></li>
+</ul>
+<h2>10.3 Grounding &amp; Citations</h2>
+<ul class="cl">
+<li><label><input type="checkbox" data-i="651"><span>Inline citations</span></label></li>
+<li><label><input type="checkbox" data-i="652"><span>Quote-then-answer pattern</span></label></li>
+<li><label><input type="checkbox" data-i="653"><span>Verifying citations actually support claims</span></label></li>
+<li><label><input type="checkbox" data-i="654"><span>Showing source snippets in the UI</span></label></li>
+<li><label><input type="checkbox" data-i="655"><span>Citation-level faithfulness checks</span></label></li>
+</ul>
+<h2>10.4 Output Handling</h2>
+<ul class="cl">
+<li><label><input type="checkbox" data-i="659"><span>Streaming tokens to the client</span></label></li>
+<li><label><input type="checkbox" data-i="660"><span>Structured output (JSON schema)</span></label></li>
+<li><label><input type="checkbox" data-i="661"><span>Refusals / "I don't know" responses</span></label></li>
+<li><label><input type="checkbox" data-i="662"><span>Follow-up suggestions</span></label></li>
+<li><label><input type="checkbox" data-i="663"><span>Feedback buttons (👍 / 👎)</span></label></li>
+</ul>
+<h3>Must be able to answer</h3>
+<ul class="cl">
+<li><label><input type="checkbox" data-i="667"><span>Why does the model still hallucinate with retrieved context?</span></label></li>
+<li><label><input type="checkbox" data-i="668"><span>How do I make the model say "I don't know" reliably?</span></label></li>
+<li><label><input type="checkbox" data-i="669"><span>What happens when retrieved chunks contradict each other?</span></label></li>
+<li><label><input type="checkbox" data-i="670"><span>Why is more context not always better?</span></label></li>
+</ul>
+<h3>Practice</h3>
+<ul class="cl">
+<li><label><input type="checkbox" data-i="674"><span>Add citations to your answers and click through to verify them</span></label></li>
+<li><label><input type="checkbox" data-i="675"><span>Test with questions whose answers are <strong>not</strong> in the corpus</span></label></li>
+<li><label><input type="checkbox" data-i="676"><span>Test with contradictory documents</span></label></li>
+</ul>
+<hr>
+</section>
+<section class="phase"><h1>PHASE 11 — Advanced RAG Techniques<span class="pp"></span></h1>
+<blockquote>Goal: Know the techniques used in modern production systems, and <strong>when each is justified</strong>.</blockquote>
+<blockquote>⚠️ Learn these only after you have an eval set and know your failure modes. Each one adds complexity and cost.</blockquote>
+<h2>11.1 Better Chunk Representations</h2>
+<ul class="cl">
+<li><label><input type="checkbox" data-i="688"><span><strong>Parent-document retrieval</strong> (embed small chunks, return the larger parent)</span></label></li>
+<li><label><input type="checkbox" data-i="689"><span><strong>Sentence-window retrieval</strong> (retrieve a sentence, return surrounding window)</span></label></li>
+<li><label><input type="checkbox" data-i="690"><span><strong>Small-to-big retrieval</strong></span></label></li>
+<li><label><input type="checkbox" data-i="691"><span><strong>Multi-vector retrieval</strong> (several embeddings per document: summary, questions, chunks)</span></label></li>
+<li><label><input type="checkbox" data-i="692"><span><strong>Hypothetical question indexing</strong> (embed questions each chunk answers)</span></label></li>
+<li><label><input type="checkbox" data-i="693"><span><strong>Contextual retrieval</strong> (LLM adds document-level context to each chunk before embedding / BM25)</span></label></li>
+<li><label><input type="checkbox" data-i="694"><span><strong>Late chunking</strong> (embed full document first, then pool into chunks)</span></label></li>
+<li><label><input type="checkbox" data-i="695"><span><strong>Proposition-level indexing</strong></span></label></li>
+</ul>
+<h2>11.2 Better Retrieval Models</h2>
+<ul class="cl">
+<li><label><input type="checkbox" data-i="699"><span>ColBERT / late-interaction retrieval (multi-vector token embeddings)</span></label></li>
+<li><label><input type="checkbox" data-i="700"><span>Learned sparse + dense combos</span></label></li>
+<li><label><input type="checkbox" data-i="701"><span>Domain-fine-tuned embedding models</span></label></li>
+<li><label><input type="checkbox" data-i="702"><span>Instruction-tuned embeddings</span></label></li>
+</ul>
+<h2>11.3 Hierarchical &amp; Graph-Based RAG</h2>
+<ul class="cl">
+<li><label><input type="checkbox" data-i="706"><span>RAPTOR (recursive summarization tree)</span></label></li>
+<li><label><input type="checkbox" data-i="707"><span>Document → section → chunk hierarchies</span></label></li>
+<li><label><input type="checkbox" data-i="708"><span><strong>GraphRAG</strong> (entity / relationship graph + community summaries)</span></label></li>
+<li><label><input type="checkbox" data-i="709"><span>Knowledge graph + vector hybrid</span></label></li>
+<li><label><input type="checkbox" data-i="710"><span>Entity linking</span></label></li>
+<li><label><input type="checkbox" data-i="711"><span>When graphs help (multi-hop, "global" questions about a whole corpus)</span></label></li>
+<li><label><input type="checkbox" data-i="712"><span>When graphs are overkill (simple lookup questions)</span></label></li>
+</ul>
+<h2>11.4 Self-Correcting &amp; Adaptive RAG</h2>
+<ul class="cl">
+<li><label><input type="checkbox" data-i="716"><span><strong>Self-RAG</strong> (model decides when to retrieve and critiques its output)</span></label></li>
+<li><label><input type="checkbox" data-i="717"><span><strong>Corrective RAG (CRAG)</strong> (grade retrieved docs, re-search if poor)</span></label></li>
+<li><label><input type="checkbox" data-i="718"><span><strong>Adaptive RAG</strong> (choose strategy by question complexity)</span></label></li>
+<li><label><input type="checkbox" data-i="719"><span>Retrieval-grading step (is this chunk relevant?)</span></label></li>
+<li><label><input type="checkbox" data-i="720"><span>Answer-grading step (is the answer grounded?)</span></label></li>
+<li><label><input type="checkbox" data-i="721"><span>Retry loops with a cap</span></label></li>
+<li><label><input type="checkbox" data-i="722"><span>Fallback to web search</span></label></li>
+</ul>
+<h2>11.5 Agentic RAG</h2>
+<ul class="cl">
+<li><label><input type="checkbox" data-i="726"><span>Retrieval as a <strong>tool</strong> the LLM calls</span></label></li>
+<li><label><input type="checkbox" data-i="727"><span>Multi-step retrieval loops</span></label></li>
+<li><label><input type="checkbox" data-i="728"><span>Planning and decomposition</span></label></li>
+<li><label><input type="checkbox" data-i="729"><span>Multi-hop reasoning</span></label></li>
+<li><label><input type="checkbox" data-i="730"><span>Multiple tools (vector search, SQL, web, code)</span></label></li>
+<li><label><input type="checkbox" data-i="731"><span>Iterative refinement</span></label></li>
+<li><label><input type="checkbox" data-i="732"><span>Stopping conditions and step limits</span></label></li>
+<li><label><input type="checkbox" data-i="733"><span>Cost / latency control for agent loops</span></label></li>
+<li><label><input type="checkbox" data-i="734"><span>Agent observability</span></label></li>
+</ul>
+<pre>Simple RAG:  retrieve once → answer
+Agentic RAG: think → retrieve → read → think again → retrieve more → answer</pre>
+<h2>11.6 Multimodal RAG</h2>
+<ul class="cl">
+<li><label><input type="checkbox" data-i="743"><span>Image embeddings (CLIP-style)</span></label></li>
+<li><label><input type="checkbox" data-i="744"><span>Page-image retrieval (embed whole page screenshots, e.g., ColPali-style)</span></label></li>
+<li><label><input type="checkbox" data-i="745"><span>Caption-then-embed approach</span></label></li>
+<li><label><input type="checkbox" data-i="746"><span>Chart and table understanding</span></label></li>
+<li><label><input type="checkbox" data-i="747"><span>Audio / video via transcripts</span></label></li>
+<li><label><input type="checkbox" data-i="748"><span>Passing images to a multimodal LLM</span></label></li>
+</ul>
+<h2>11.7 Structured &amp; Specialized RAG</h2>
+<ul class="cl">
+<li><label><input type="checkbox" data-i="752"><span>Text-to-SQL RAG (schema retrieval + SQL generation + validation)</span></label></li>
+<li><label><input type="checkbox" data-i="753"><span>Table QA</span></label></li>
+<li><label><input type="checkbox" data-i="754"><span>Code RAG (repo indexing, symbol-aware chunking, AST)</span></label></li>
+<li><label><input type="checkbox" data-i="755"><span>Conversational RAG with memory</span></label></li>
+<li><label><input type="checkbox" data-i="756"><span>Personalized RAG (user-specific context)</span></label></li>
+<li><label><input type="checkbox" data-i="757"><span>Temporal RAG (freshness-aware, versioned docs)</span></label></li>
+<li><label><input type="checkbox" data-i="758"><span>Multi-lingual / cross-lingual RAG</span></label></li>
+<li><label><input type="checkbox" data-i="759"><span>Enterprise RAG over many connectors</span></label></li>
+</ul>
+<h2>11.8 Context Optimization</h2>
+<ul class="cl">
+<li><label><input type="checkbox" data-i="763"><span>Contextual compression (extract only relevant sentences)</span></label></li>
+<li><label><input type="checkbox" data-i="764"><span>Prompt caching for stable context</span></label></li>
+<li><label><input type="checkbox" data-i="765"><span>Context window packing</span></label></li>
+<li><label><input type="checkbox" data-i="766"><span>Long-context + RAG hybrid (retrieve broadly, let the model read a lot)</span></label></li>
+<li><label><input type="checkbox" data-i="767"><span>Citations with quote extraction</span></label></li>
+</ul>
+<h3>Practice</h3>
+<ul class="cl">
+<li><label><input type="checkbox" data-i="771"><span>Add parent-document retrieval; measure the change</span></label></li>
+<li><label><input type="checkbox" data-i="772"><span>Add contextual retrieval to a subset of chunks; compare recall</span></label></li>
+<li><label><input type="checkbox" data-i="773"><span>Build a small corrective-RAG loop with a retry cap</span></label></li>
+<li><label><input type="checkbox" data-i="774"><span>Turn retrieval into a tool and build a simple agentic RAG</span></label></li>
+<li><label><input type="checkbox" data-i="775"><span>Try GraphRAG on a small corpus and decide whether it was worth the cost</span></label></li>
+</ul>
+<h3>Decision table (fill this in as you learn)</h3>
+<div class="tw"><table><thead><tr><th>Failure you observe</th><th>Technique to try</th></tr></thead><tbody><tr><td>Exact terms / IDs missed</td><td>Hybrid search (BM25 + dense)</td></tr><tr><td>Right doc retrieved, wrong chunk ranked first</td><td>Reranker</td></tr><tr><td>Chunk lacks context ("it", "the company")</td><td>Contextual retrieval, header prepending</td></tr><tr><td>Answer needs surrounding paragraphs</td><td>Parent-document / sentence-window</td></tr><tr><td>Vague or conversational queries</td><td>Query rewriting, multi-query</td></tr><tr><td>Multi-part questions</td><td>Decomposition / agentic RAG</td></tr><tr><td>"Summarize the whole corpus" questions</td><td>RAPTOR / GraphRAG</td></tr><tr><td>Questions about numbers in tables</td><td>Table-aware parsing, text-to-SQL</td></tr><tr><td>Irrelevant chunks causing hallucination</td><td>Relevance grading, thresholds, CRAG</td></tr><tr><td>Different vocabulary than documents</td><td>HyDE, query expansion, fine-tuned embeddings</td></tr><tr><td>Visual documents (slides, charts)</td><td>Multimodal / page-image retrieval</td></tr></tbody></table></div>
+<hr>
+</section>
+<section class="phase"><h1>PHASE 12 — Evaluation (Critical)<span class="pp"></span></h1>
+<blockquote>Goal: Know — with numbers — whether your RAG is good, and whether changes improved it.</blockquote>
+<h2>12.1 Evaluate Retrieval and Generation Separately</h2>
+<pre>Bad answer?
+   ├─ Was the right chunk retrieved?   NO  → retrieval problem
+   │                                   YES → ↓
+   └─ Did the LLM use it correctly?    NO  → generation problem</pre>
+<h2>12.2 Retrieval Metrics</h2>
+<ul class="cl">
+<li><label><input type="checkbox" data-i="810"><span>Recall@k</span></label></li>
+<li><label><input type="checkbox" data-i="811"><span>Precision@k</span></label></li>
+<li><label><input type="checkbox" data-i="812"><span>MRR</span></label></li>
+<li><label><input type="checkbox" data-i="813"><span>nDCG</span></label></li>
+<li><label><input type="checkbox" data-i="814"><span>Hit rate</span></label></li>
+<li><label><input type="checkbox" data-i="815"><span>Context precision</span></label></li>
+<li><label><input type="checkbox" data-i="816"><span>Context recall</span></label></li>
+</ul>
+<h2>12.3 Generation Metrics</h2>
+<ul class="cl">
+<li><label><input type="checkbox" data-i="820"><span><strong>Faithfulness / groundedness</strong> (is every claim supported by the context?)</span></label></li>
+<li><label><input type="checkbox" data-i="821"><span><strong>Answer relevance</strong> (does it answer the question?)</span></label></li>
+<li><label><input type="checkbox" data-i="822"><span><strong>Answer correctness</strong> (vs a reference answer)</span></label></li>
+<li><label><input type="checkbox" data-i="823"><span>Citation accuracy</span></label></li>
+<li><label><input type="checkbox" data-i="824"><span>Completeness</span></label></li>
+<li><label><input type="checkbox" data-i="825"><span>Refusal correctness (said "I don't know" when it should)</span></label></li>
+<li><label><input type="checkbox" data-i="826"><span>Tone / format compliance</span></label></li>
+</ul>
+<h2>12.4 Building the Test Set</h2>
+<ul class="cl">
+<li><label><input type="checkbox" data-i="830"><span>Real user questions (best source)</span></label></li>
+<li><label><input type="checkbox" data-i="831"><span>Questions written by domain experts</span></label></li>
+<li><label><input type="checkbox" data-i="832"><span>Synthetic questions generated from chunks by an LLM</span></label></li>
+<li><label><input type="checkbox" data-i="833"><span>Adversarial questions</span></label></li>
+<li><label><input type="checkbox" data-i="834"><span>Unanswerable questions</span></label></li>
+<li><label><input type="checkbox" data-i="835"><span>Multi-hop questions</span></label></li>
+<li><label><input type="checkbox" data-i="836"><span>Questions with exact identifiers</span></label></li>
+<li><label><input type="checkbox" data-i="837"><span>Versioned test set (don't silently change it)</span></label></li>
+<li><label><input type="checkbox" data-i="838"><span>Separate dev set and held-out set</span></label></li>
+</ul>
+<h2>12.5 Evaluation Methods</h2>
+<ul class="cl">
+<li><label><input type="checkbox" data-i="842"><span>LLM-as-judge (with a clear rubric)</span></label></li>
+<li><label><input type="checkbox" data-i="843"><span>Known weaknesses of LLM judges (position bias, verbosity bias, self-preference)</span></label></li>
+<li><label><input type="checkbox" data-i="844"><span>Calibrating the judge against human labels</span></label></li>
+<li><label><input type="checkbox" data-i="845"><span>Human review samples</span></label></li>
+<li><label><input type="checkbox" data-i="846"><span>Pairwise comparison (A vs B)</span></label></li>
+<li><label><input type="checkbox" data-i="847"><span>Regression tests in CI</span></label></li>
+<li><label><input type="checkbox" data-i="848"><span>Online metrics (thumbs up/down, follow-up rate, escalations)</span></label></li>
+<li><label><input type="checkbox" data-i="849"><span>A/B testing</span></label></li>
+</ul>
+<h2>12.6 Tools</h2>
+<ul class="cl">
+<li><label><input type="checkbox" data-i="853"><span>RAGAS</span></label></li>
+<li><label><input type="checkbox" data-i="854"><span>DeepEval</span></label></li>
+<li><label><input type="checkbox" data-i="855"><span>TruLens</span></label></li>
+<li><label><input type="checkbox" data-i="856"><span>LangSmith / Langfuse / Phoenix evaluations</span></label></li>
+<li><label><input type="checkbox" data-i="857"><span>Custom evaluation scripts (often the best option)</span></label></li>
+</ul>
+<h3>Practice</h3>
+<ul class="cl">
+<li><label><input type="checkbox" data-i="861"><span>Build a 50-question eval set</span></label></li>
+<li><label><input type="checkbox" data-i="862"><span>Write a script that runs the pipeline and reports Recall@5 + Faithfulness</span></label></li>
+<li><label><input type="checkbox" data-i="863"><span>Change one thing (chunk size, reranker, etc.) and compare before/after</span></label></li>
+<li><label><input type="checkbox" data-i="864"><span>Label 30 judge outputs manually and see how often you agree with the LLM judge</span></label></li>
+</ul>
+<hr>
+</section>
+<section class="phase"><h1>PHASE 13 — Production Architecture<span class="pp"></span></h1>
+<blockquote>Goal: Move from a notebook to a service that runs reliably for real users.</blockquote>
+<h2>13.1 Ingestion Pipeline</h2>
+<ul class="cl">
+<li><label><input type="checkbox" data-i="874"><span>Connectors / crawlers for each source</span></label></li>
+<li><label><input type="checkbox" data-i="875"><span>Queue-based ingestion (workers)</span></label></li>
+<li><label><input type="checkbox" data-i="876"><span>Idempotent processing</span></label></li>
+<li><label><input type="checkbox" data-i="877"><span>Parse → chunk → embed → upsert as separate stages</span></label></li>
+<li><label><input type="checkbox" data-i="878"><span>Batch embedding</span></label></li>
+<li><label><input type="checkbox" data-i="879"><span>Retry and dead-letter handling</span></label></li>
+<li><label><input type="checkbox" data-i="880"><span><strong>Incremental updates</strong> (only re-process changed documents)</span></label></li>
+<li><label><input type="checkbox" data-i="881"><span>Content hashing for change detection</span></label></li>
+<li><label><input type="checkbox" data-i="882"><span><strong>Deletion handling</strong> (removed documents must disappear from the index)</span></label></li>
+<li><label><input type="checkbox" data-i="883"><span>Document versioning</span></label></li>
+<li><label><input type="checkbox" data-i="884"><span>Backfills and re-indexing</span></label></li>
+<li><label><input type="checkbox" data-i="885"><span>Blue-green index swaps (build new index, then switch)</span></label></li>
+<li><label><input type="checkbox" data-i="886"><span>Ingestion monitoring and failure alerts</span></label></li>
+</ul>
+<pre>Source → Queue → Parser worker → Chunker → Embedder worker → Vector DB + Keyword index
+                                                  ↓
+                                            Metadata DB (Postgres)</pre>
+<h2>13.2 Query Service</h2>
+<ul class="cl">
+<li><label><input type="checkbox" data-i="896"><span>FastAPI service with async I/O</span></label></li>
+<li><label><input type="checkbox" data-i="897"><span>Streaming responses (SSE / WebSocket)</span></label></li>
+<li><label><input type="checkbox" data-i="898"><span>Timeouts on every external call</span></label></li>
+<li><label><input type="checkbox" data-i="899"><span>Retries with exponential backoff and jitter</span></label></li>
+<li><label><input type="checkbox" data-i="900"><span>Circuit breakers for LLM / vector DB failures</span></label></li>
+<li><label><input type="checkbox" data-i="901"><span>Rate limiting per user / tenant</span></label></li>
+<li><label><input type="checkbox" data-i="902"><span>Request validation</span></label></li>
+<li><label><input type="checkbox" data-i="903"><span>Graceful degradation (e.g., skip rerank if it's down)</span></label></li>
+<li><label><input type="checkbox" data-i="904"><span>Fallback models / providers</span></label></li>
+<li><label><input type="checkbox" data-i="905"><span>Concurrency control</span></label></li>
+</ul>
+<h2>13.3 Latency Engineering</h2>
+<ul class="cl">
+<li><label><input type="checkbox" data-i="909"><span>Latency budget per stage</span></label></li>
+</ul>
+<pre>Query rewrite   ~300 ms
+Embedding       ~50  ms
+Retrieval       ~50  ms
+Rerank          ~200 ms
+LLM first token ~500 ms</pre>
+<ul class="cl">
+<li><label><input type="checkbox" data-i="919"><span>Run dense + sparse retrieval in parallel</span></label></li>
+<li><label><input type="checkbox" data-i="920"><span>Stream the answer</span></label></li>
+<li><label><input type="checkbox" data-i="921"><span>Smaller models for rewriting / routing / grading</span></label></li>
+<li><label><input type="checkbox" data-i="922"><span>Prompt caching</span></label></li>
+<li><label><input type="checkbox" data-i="923"><span>Precompute where possible</span></label></li>
+<li><label><input type="checkbox" data-i="924"><span>Time-to-first-token vs total latency</span></label></li>
+</ul>
+<h2>13.4 Caching</h2>
+<ul class="cl">
+<li><label><input type="checkbox" data-i="928"><span>Embedding cache</span></label></li>
+<li><label><input type="checkbox" data-i="929"><span>Retrieval-result cache</span></label></li>
+<li><label><input type="checkbox" data-i="930"><span>Exact-match response cache</span></label></li>
+<li><label><input type="checkbox" data-i="931"><span><strong>Semantic cache</strong> (reuse answers for similar questions)</span></label></li>
+<li><label><input type="checkbox" data-i="932"><span>Risks of semantic caching (stale or wrong-user answers)</span></label></li>
+<li><label><input type="checkbox" data-i="933"><span>Cache invalidation when documents change</span></label></li>
+<li><label><input type="checkbox" data-i="934"><span>LLM prompt caching</span></label></li>
+</ul>
+<h2>13.5 Cost Control</h2>
+<ul class="cl">
+<li><label><input type="checkbox" data-i="938"><span>Cost per query breakdown (embedding, rerank, LLM input/output)</span></label></li>
+<li><label><input type="checkbox" data-i="939"><span>Smaller / cheaper models for sub-tasks</span></label></li>
+<li><label><input type="checkbox" data-i="940"><span>Reduce <code>k</code> and context size</span></label></li>
+<li><label><input type="checkbox" data-i="941"><span>Contextual compression</span></label></li>
+<li><label><input type="checkbox" data-i="942"><span>Caching</span></label></li>
+<li><label><input type="checkbox" data-i="943"><span>Batch / offline processing for ingestion</span></label></li>
+<li><label><input type="checkbox" data-i="944"><span>Quantized vectors</span></label></li>
+<li><label><input type="checkbox" data-i="945"><span>Budgets and per-tenant quotas</span></label></li>
+<li><label><input type="checkbox" data-i="946"><span>Model routing by question difficulty</span></label></li>
+</ul>
+<h2>13.6 Scalability</h2>
+<ul class="cl">
+<li><label><input type="checkbox" data-i="950"><span>Stateless query service (scale horizontally)</span></label></li>
+<li><label><input type="checkbox" data-i="951"><span>Vector DB sharding and replication</span></label></li>
+<li><label><input type="checkbox" data-i="952"><span>Read replicas for metadata DB</span></label></li>
+<li><label><input type="checkbox" data-i="953"><span>Autoscaling ingestion workers</span></label></li>
+<li><label><input type="checkbox" data-i="954"><span>Hot vs cold index tiers</span></label></li>
+<li><label><input type="checkbox" data-i="955"><span>Capacity planning (docs → chunks → vectors → RAM)</span></label></li>
+<li><label><input type="checkbox" data-i="956"><span>Multi-region considerations</span></label></li>
+<li><label><input type="checkbox" data-i="957"><span>Load testing</span></label></li>
+</ul>
+<h2>13.7 Multi-Tenancy &amp; Access Control</h2>
+<ul class="cl">
+<li><label><input type="checkbox" data-i="961"><span>Tenant isolation strategies</span></label></li>
+<li><label><input type="checkbox" data-i="962"><span><strong>Permission-aware retrieval</strong> (filter by user ACL <strong>before</strong> the LLM sees anything)</span></label></li>
+<li><label><input type="checkbox" data-i="963"><span>Syncing permissions from source systems</span></label></li>
+<li><label><input type="checkbox" data-i="964"><span>Handling permission changes</span></label></li>
+<li><label><input type="checkbox" data-i="965"><span>Audit logging</span></label></li>
+<li><label><input type="checkbox" data-i="966"><span>Data residency requirements</span></label></li>
+<li><label><input type="checkbox" data-i="967"><span>Per-tenant encryption / deletion</span></label></li>
+</ul>
+<blockquote>🔑 The model must <strong>never</strong> see a chunk the user isn't allowed to read. Don't rely on the prompt to enforce permissions.</blockquote>
+<h2>13.8 Deployment</h2>
+<ul class="cl">
+<li><label><input type="checkbox" data-i="973"><span>Docker</span></label></li>
+<li><label><input type="checkbox" data-i="974"><span>CI/CD for the app <strong>and</strong> for eval runs</span></label></li>
+<li><label><input type="checkbox" data-i="975"><span>Environment configs</span></label></li>
+<li><label><input type="checkbox" data-i="976"><span>Secrets management</span></label></li>
+<li><label><input type="checkbox" data-i="977"><span>Feature flags for new retrieval strategies</span></label></li>
+<li><label><input type="checkbox" data-i="978"><span>Canary releases</span></label></li>
+<li><label><input type="checkbox" data-i="979"><span>Prompt and config versioning</span></label></li>
+<li><label><input type="checkbox" data-i="980"><span>Index versioning and rollback</span></label></li>
+</ul>
+<h3>Practice</h3>
+<ul class="cl">
+<li><label><input type="checkbox" data-i="984"><span>Wrap your RAG in a FastAPI service with streaming</span></label></li>
+<li><label><input type="checkbox" data-i="985"><span>Add an ingestion worker with queue + incremental updates</span></label></li>
+<li><label><input type="checkbox" data-i="986"><span>Implement document deletion and verify it disappears from answers</span></label></li>
+<li><label><input type="checkbox" data-i="987"><span>Add per-user permission filtering and test that it can't leak</span></label></li>
+</ul>
+<hr>
+</section>
+<section class="phase"><h1>PHASE 14 — Observability &amp; Monitoring<span class="pp"></span></h1>
+<blockquote>Goal: See exactly what happened in every request, so you can debug and improve.</blockquote>
+<h2>14.1 Tracing</h2>
+<ul class="cl">
+<li><label><input type="checkbox" data-i="997"><span>Trace every request end-to-end</span></label></li>
+<li><label><input type="checkbox" data-i="998"><span>Log: original query, rewritten query, retrieved chunk IDs + scores, reranked results, final prompt, answer, citations</span></label></li>
+<li><label><input type="checkbox" data-i="999"><span>Per-stage latency</span></label></li>
+<li><label><input type="checkbox" data-i="1000"><span>Token usage and cost per request</span></label></li>
+<li><label><input type="checkbox" data-i="1001"><span>Tools: Langfuse, LangSmith, Arize Phoenix, OpenTelemetry</span></label></li>
+</ul>
+<h2>14.2 Metrics to Monitor</h2>
+<ul class="cl">
+<li><label><input type="checkbox" data-i="1005"><span>Latency (p50 / p95 / p99), time-to-first-token</span></label></li>
+<li><label><input type="checkbox" data-i="1006"><span>Error rates (by stage)</span></label></li>
+<li><label><input type="checkbox" data-i="1007"><span>Cost per query / per tenant</span></label></li>
+<li><label><input type="checkbox" data-i="1008"><span>Empty-retrieval rate</span></label></li>
+<li><label><input type="checkbox" data-i="1009"><span>"I don't know" rate</span></label></li>
+<li><label><input type="checkbox" data-i="1010"><span>Average retrieval score</span></label></li>
+<li><label><input type="checkbox" data-i="1011"><span>Thumbs up / down ratio</span></label></li>
+<li><label><input type="checkbox" data-i="1012"><span>Citation click-through</span></label></li>
+<li><label><input type="checkbox" data-i="1013"><span>Ingestion lag (how stale is the index?)</span></label></li>
+<li><label><input type="checkbox" data-i="1014"><span>Failed-ingestion counts</span></label></li>
+</ul>
+<h2>14.3 Feedback Loops</h2>
+<ul class="cl">
+<li><label><input type="checkbox" data-i="1018"><span>Collect user feedback</span></label></li>
+<li><label><input type="checkbox" data-i="1019"><span>Review low-rated answers weekly</span></label></li>
+<li><label><input type="checkbox" data-i="1020"><span>Turn failures into new eval-set questions</span></label></li>
+<li><label><input type="checkbox" data-i="1021"><span>Identify content gaps (questions with no good documents)</span></label></li>
+<li><label><input type="checkbox" data-i="1022"><span>Track drift (new topics, new document types)</span></label></li>
+</ul>
+<h2>14.4 Debugging Playbook</h2>
+<pre>1. Open the trace for the bad answer
+2. Was the right document in the index at all?       → ingestion problem
+3. Was the right chunk retrieved in top-k?           → retrieval / chunking / embedding problem
+4. Was it ranked high enough to be included?         → rerank / k problem
+5. Was it in the final prompt?                       → context-assembly problem
+6. Did the LLM use it correctly?                     → prompt / model problem</pre>
+<h3>Practice</h3>
+<ul class="cl">
+<li><label><input type="checkbox" data-i="1037"><span>Add tracing to your pipeline</span></label></li>
+<li><label><input type="checkbox" data-i="1038"><span>Debug 10 failed answers using the playbook above</span></label></li>
+<li><label><input type="checkbox" data-i="1039"><span>Categorize your failures (ingestion / retrieval / ranking / generation)</span></label></li>
+</ul>
+<hr>
+</section>
+<section class="phase"><h1>PHASE 15 — Security, Privacy &amp; Safety<span class="pp"></span></h1>
+<blockquote>Goal: RAG connects an LLM to your data. That's a big attack surface.</blockquote>
+<h2>15.1 Prompt Injection</h2>
+<ul class="cl">
+<li><label><input type="checkbox" data-i="1049"><span><strong>Direct</strong> prompt injection (user tries to override instructions)</span></label></li>
+<li><label><input type="checkbox" data-i="1050"><span><strong>Indirect</strong> prompt injection (malicious text hidden <strong>inside retrieved documents</strong>)</span></label></li>
+<li><label><input type="checkbox" data-i="1051"><span>Why retrieved content must be treated as <strong>untrusted data</strong></span></label></li>
+<li><label><input type="checkbox" data-i="1052"><span>Delimiting and labeling retrieved content</span></label></li>
+<li><label><input type="checkbox" data-i="1053"><span>Not letting retrieved text trigger tool actions without checks</span></label></li>
+<li><label><input type="checkbox" data-i="1054"><span>Output filtering</span></label></li>
+<li><label><input type="checkbox" data-i="1055"><span>Least-privilege tools</span></label></li>
+</ul>
+<h2>15.2 Data Leakage</h2>
+<ul class="cl">
+<li><label><input type="checkbox" data-i="1059"><span>Cross-tenant leakage</span></label></li>
+<li><label><input type="checkbox" data-i="1060"><span>Permission bypass through retrieval</span></label></li>
+<li><label><input type="checkbox" data-i="1061"><span>System-prompt leakage</span></label></li>
+<li><label><input type="checkbox" data-i="1062"><span>Leaking PII in answers</span></label></li>
+<li><label><input type="checkbox" data-i="1063"><span>Logging sensitive content safely</span></label></li>
+<li><label><input type="checkbox" data-i="1064"><span>Data retention rules</span></label></li>
+</ul>
+<h2>15.3 Poisoning &amp; Integrity</h2>
+<ul class="cl">
+<li><label><input type="checkbox" data-i="1068"><span>Index poisoning (bad documents added deliberately)</span></label></li>
+<li><label><input type="checkbox" data-i="1069"><span>Source trust levels</span></label></li>
+<li><label><input type="checkbox" data-i="1070"><span>Document provenance</span></label></li>
+<li><label><input type="checkbox" data-i="1071"><span>Review process for ingested content</span></label></li>
+</ul>
+<h2>15.4 PII &amp; Compliance</h2>
+<ul class="cl">
+<li><label><input type="checkbox" data-i="1075"><span>PII detection and redaction before indexing</span></label></li>
+<li><label><input type="checkbox" data-i="1076"><span>Encryption at rest and in transit</span></label></li>
+<li><label><input type="checkbox" data-i="1077"><span>Right-to-delete (remove a user's data from index <strong>and</strong> caches)</span></label></li>
+<li><label><input type="checkbox" data-i="1078"><span>GDPR / DPDP-style requirements (awareness)</span></label></li>
+<li><label><input type="checkbox" data-i="1079"><span>Sending data to third-party LLM / embedding APIs — what's allowed?</span></label></li>
+<li><label><input type="checkbox" data-i="1080"><span>Self-hosted vs hosted models for sensitive data</span></label></li>
+</ul>
+<h2>15.5 Guardrails</h2>
+<ul class="cl">
+<li><label><input type="checkbox" data-i="1084"><span>Input guardrails (topic, abuse, injection detection)</span></label></li>
+<li><label><input type="checkbox" data-i="1085"><span>Output guardrails (groundedness, toxicity, PII)</span></label></li>
+<li><label><input type="checkbox" data-i="1086"><span>Scope limiting ("only answer about X")</span></label></li>
+<li><label><input type="checkbox" data-i="1087"><span>Human escalation paths</span></label></li>
+<li><label><input type="checkbox" data-i="1088"><span>Red-teaming your own system</span></label></li>
+</ul>
+<h3>Practice</h3>
+<ul class="cl">
+<li><label><input type="checkbox" data-i="1092"><span>Plant a malicious instruction inside a test document and see whether your RAG follows it</span></label></li>
+<li><label><input type="checkbox" data-i="1093"><span>Test whether user A can retrieve user B's documents</span></label></li>
+<li><label><input type="checkbox" data-i="1094"><span>Add a defense and re-test</span></label></li>
+</ul>
+<hr>
+</section>
+<section class="phase"><h1>PHASE 16 — Frameworks &amp; Tooling<span class="pp"></span></h1>
+<blockquote>Goal: Use tools wisely without becoming dependent on abstractions you don't understand.</blockquote>
+<h2>16.1 Frameworks</h2>
+<ul class="cl">
+<li><label><input type="checkbox" data-i="1104"><span>LlamaIndex (strong on ingestion / indexing / retrieval abstractions)</span></label></li>
+<li><label><input type="checkbox" data-i="1105"><span>LangChain (general LLM app building)</span></label></li>
+<li><label><input type="checkbox" data-i="1106"><span>LangGraph (stateful agent / workflow graphs)</span></label></li>
+<li><label><input type="checkbox" data-i="1107"><span>Haystack</span></label></li>
+<li><label><input type="checkbox" data-i="1108"><span>DSPy (programmatic prompt / pipeline optimization)</span></label></li>
+<li><label><input type="checkbox" data-i="1109"><span>Vendor SDKs directly (often the simplest)</span></label></li>
+</ul>
+<h2>16.2 Evaluating Whether to Use a Framework</h2>
+<ul class="cl">
+<li><label><input type="checkbox" data-i="1113"><span>What does it hide from me?</span></label></li>
+<li><label><input type="checkbox" data-i="1114"><span>Can I see the exact prompts it sends?</span></label></li>
+<li><label><input type="checkbox" data-i="1115"><span>Can I swap the vector DB / LLM easily?</span></label></li>
+<li><label><input type="checkbox" data-i="1116"><span>Is it stable between versions?</span></label></li>
+<li><label><input type="checkbox" data-i="1117"><span>Would 100 lines of my own code be clearer?</span></label></li>
+</ul>
+<h2>16.3 Supporting Tools</h2>
+<ul class="cl">
+<li><label><input type="checkbox" data-i="1121"><span>Document parsers (Docling, Unstructured, etc.)</span></label></li>
+<li><label><input type="checkbox" data-i="1122"><span>Observability (Langfuse, Phoenix)</span></label></li>
+<li><label><input type="checkbox" data-i="1123"><span>Evaluation (RAGAS, DeepEval)</span></label></li>
+<li><label><input type="checkbox" data-i="1124"><span>Workflow orchestration (Airflow, Prefect, Temporal) for ingestion</span></label></li>
+<li><label><input type="checkbox" data-i="1125"><span>Message queues (Kafka, SQS, Celery / Redis queues)</span></label></li>
+<li><label><input type="checkbox" data-i="1126"><span>Object storage for raw documents</span></label></li>
+</ul>
+<blockquote>Rule: <strong>Build it once from scratch before using a framework.</strong> Then you'll know what the framework is doing for you.</blockquote>
+<hr>
+</section>
+<section class="phase"><h1>PHASE 17 — Common Failure Modes<span class="pp"></span></h1>
+<blockquote>Goal: Recognize problems quickly. Most RAG pain falls into these categories.</blockquote>
+<h2>17.1 Ingestion Failures</h2>
+<ul class="cl">
+<li><label><input type="checkbox" data-i="1138"><span>Garbled PDF text</span></label></li>
+<li><label><input type="checkbox" data-i="1139"><span>Tables flattened into nonsense</span></label></li>
+<li><label><input type="checkbox" data-i="1140"><span>Missing pages / failed OCR</span></label></li>
+<li><label><input type="checkbox" data-i="1141"><span>Duplicate documents inflating results</span></label></li>
+<li><label><input type="checkbox" data-i="1142"><span>Stale documents never updated</span></label></li>
+<li><label><input type="checkbox" data-i="1143"><span>Deleted documents still retrievable</span></label></li>
+<li><label><input type="checkbox" data-i="1144"><span>Missing metadata</span></label></li>
+</ul>
+<h2>17.2 Chunking Failures</h2>
+<ul class="cl">
+<li><label><input type="checkbox" data-i="1148"><span>Answer split across two chunks</span></label></li>
+<li><label><input type="checkbox" data-i="1149"><span>Chunk lacks context ("this policy" — which policy?)</span></label></li>
+<li><label><input type="checkbox" data-i="1150"><span>Chunks too large and diluted</span></label></li>
+<li><label><input type="checkbox" data-i="1151"><span>Chunks too small to be meaningful</span></label></li>
+</ul>
+<h2>17.3 Retrieval Failures</h2>
+<ul class="cl">
+<li><label><input type="checkbox" data-i="1155"><span>Exact identifiers not found (needs BM25)</span></label></li>
+<li><label><input type="checkbox" data-i="1156"><span>Semantic mismatch (user vocabulary ≠ document vocabulary)</span></label></li>
+<li><label><input type="checkbox" data-i="1157"><span>Negation ignored ("not eligible" retrieved as "eligible")</span></label></li>
+<li><label><input type="checkbox" data-i="1158"><span>Numbers and dates handled poorly</span></label></li>
+<li><label><input type="checkbox" data-i="1159"><span>Right chunk retrieved but ranked 15th</span></label></li>
+<li><label><input type="checkbox" data-i="1160"><span>Filter too aggressive → no results</span></label></li>
+<li><label><input type="checkbox" data-i="1161"><span>Too many near-duplicate chunks</span></label></li>
+</ul>
+<h2>17.4 Generation Failures</h2>
+<ul class="cl">
+<li><label><input type="checkbox" data-i="1165"><span>Hallucinating beyond the context</span></label></li>
+<li><label><input type="checkbox" data-i="1166"><span>Ignoring relevant context in the middle</span></label></li>
+<li><label><input type="checkbox" data-i="1167"><span>Mixing facts from different documents</span></label></li>
+<li><label><input type="checkbox" data-i="1168"><span>Wrong or fabricated citations</span></label></li>
+<li><label><input type="checkbox" data-i="1169"><span>Failing to say "I don't know"</span></label></li>
+<li><label><input type="checkbox" data-i="1170"><span>Over-answering or under-answering</span></label></li>
+<li><label><input type="checkbox" data-i="1171"><span>Following instructions hidden in documents</span></label></li>
+</ul>
+<h2>17.5 System Failures</h2>
+<ul class="cl">
+<li><label><input type="checkbox" data-i="1175"><span>Slow responses</span></label></li>
+<li><label><input type="checkbox" data-i="1176"><span>Cost blow-ups</span></label></li>
+<li><label><input type="checkbox" data-i="1177"><span>LLM / vector DB outages</span></label></li>
+<li><label><input type="checkbox" data-i="1178"><span>Rate limits during ingestion</span></label></li>
+<li><label><input type="checkbox" data-i="1179"><span>Index and model version mismatches</span></label></li>
+<li><label><input type="checkbox" data-i="1180"><span>Silent quality regressions after a change</span></label></li>
+</ul>
+<hr>
+</section>
+<section class="phase"><h1>PHASE 18 — Projects (Build Ladder)<span class="pp"></span></h1>
+<blockquote>Goal: Learn by building. Do these in order, and keep each one simple.</blockquote>
+<h2>Level 1 — Naive RAG</h2>
+<ul class="cl">
+<li><label><input type="checkbox" data-i="1190"><span>Q&amp;A over a few Markdown / PDF files</span></label></li>
+<li><label><input type="checkbox" data-i="1191"><span>Raw SDK calls, no framework</span></label></li>
+<li><label><input type="checkbox" data-i="1192"><span>Prints retrieved chunks and sources</span></label></li>
+</ul>
+<h2>Level 2 — Better RAG</h2>
+<ul class="cl">
+<li><label><input type="checkbox" data-i="1196"><span>Structure-aware chunking with metadata</span></label></li>
+<li><label><input type="checkbox" data-i="1197"><span>Hybrid search (BM25 + vectors) with RRF</span></label></li>
+<li><label><input type="checkbox" data-i="1198"><span>Reranker</span></label></li>
+<li><label><input type="checkbox" data-i="1199"><span>Citations</span></label></li>
+<li><label><input type="checkbox" data-i="1200"><span>50-question eval set + eval script</span></label></li>
+</ul>
+<h2>Level 3 — Chat RAG Service</h2>
+<ul class="cl">
+<li><label><input type="checkbox" data-i="1204"><span>FastAPI backend with streaming</span></label></li>
+<li><label><input type="checkbox" data-i="1205"><span>Conversation-aware query rewriting</span></label></li>
+<li><label><input type="checkbox" data-i="1206"><span>PostgreSQL + pgvector</span></label></li>
+<li><label><input type="checkbox" data-i="1207"><span>Tracing (Langfuse / Phoenix)</span></label></li>
+<li><label><input type="checkbox" data-i="1208"><span>Simple web UI or API client</span></label></li>
+</ul>
+<h2>Level 4 — Production-Style RAG</h2>
+<ul class="cl">
+<li><label><input type="checkbox" data-i="1212"><span>Queue-based ingestion with incremental updates and deletions</span></label></li>
+<li><label><input type="checkbox" data-i="1213"><span>Multi-tenant, permission-aware retrieval</span></label></li>
+<li><label><input type="checkbox" data-i="1214"><span>Caching + rate limiting</span></label></li>
+<li><label><input type="checkbox" data-i="1215"><span>CI that runs the eval set on every change</span></label></li>
+<li><label><input type="checkbox" data-i="1216"><span>Dockerized deployment</span></label></li>
+<li><label><input type="checkbox" data-i="1217"><span>Cost and latency dashboard</span></label></li>
+</ul>
+<h2>Level 5 — Advanced RAG</h2>
+<ul class="cl">
+<li><label><input type="checkbox" data-i="1221"><span>Agentic RAG with retrieval + SQL + web tools</span></label></li>
+<li><label><input type="checkbox" data-i="1222"><span>Contextual retrieval or parent-document retrieval</span></label></li>
+<li><label><input type="checkbox" data-i="1223"><span>Corrective loop with relevance grading</span></label></li>
+<li><label><input type="checkbox" data-i="1224"><span>Multimodal document support</span></label></li>
+<li><label><input type="checkbox" data-i="1225"><span>Prompt-injection defenses and tests</span></label></li>
+</ul>
+<h2>Project Ideas (pick what you'd actually use)</h2>
+<ul class="cl">
+<li><label><input type="checkbox" data-i="1229"><span>Documentation assistant for an open-source project (e.g., the repo you're contributing to)</span></label></li>
+<li><label><input type="checkbox" data-i="1230"><span>Chat over your own notes, resume, and project READMEs</span></label></li>
+<li><label><input type="checkbox" data-i="1231"><span>Codebase Q&amp;A assistant</span></label></li>
+<li><label><input type="checkbox" data-i="1232"><span>Research-paper assistant with citations</span></label></li>
+<li><label><input type="checkbox" data-i="1233"><span>Customer-support assistant over an FAQ + tickets</span></label></li>
+<li><label><input type="checkbox" data-i="1234"><span>Legal / policy document assistant with strict citations</span></label></li>
+<li><label><input type="checkbox" data-i="1235"><span>Text-to-SQL analytics assistant over a sample database</span></label></li>
+<li><label><input type="checkbox" data-i="1236"><span>Meeting / transcript search assistant</span></label></li>
+</ul>
+<hr>
+</section>
+<section class="phase"><h1>PHASE 19 — RAG System Design Problems<span class="pp"></span></h1>
+<blockquote>Practice explaining RAG in system-design interview format.</blockquote>
+<ul class="cl">
+<li><label><input type="checkbox" data-i="1244"><span>Design a company-wide knowledge-base assistant</span></label></li>
+<li><label><input type="checkbox" data-i="1245"><span>Design a customer-support RAG chatbot</span></label></li>
+<li><label><input type="checkbox" data-i="1246"><span>Design a RAG system for 10 million documents</span></label></li>
+<li><label><input type="checkbox" data-i="1247"><span>Design a multi-tenant RAG SaaS</span></label></li>
+<li><label><input type="checkbox" data-i="1248"><span>Design an enterprise search with per-user permissions</span></label></li>
+<li><label><input type="checkbox" data-i="1249"><span>Design a code-search assistant</span></label></li>
+<li><label><input type="checkbox" data-i="1250"><span>Design a legal document Q&amp;A system</span></label></li>
+<li><label><input type="checkbox" data-i="1251"><span>Design a real-time RAG system with fresh data</span></label></li>
+<li><label><input type="checkbox" data-i="1252"><span>Design a multimodal document-search system</span></label></li>
+<li><label><input type="checkbox" data-i="1253"><span>Design an agentic research assistant</span></label></li>
+<li><label><input type="checkbox" data-i="1254"><span>Design a RAG evaluation platform</span></label></li>
+</ul>
+<h3>Use this framework</h3>
+<pre>Requirements (users, doc types, volume, freshness, accuracy, latency, privacy)
+      ↓
+Estimates (docs → chunks → vectors → storage → QPS → cost/query)
+      ↓
+Ingestion pipeline
+      ↓
+Index design (vector + keyword + metadata)
+      ↓
+Query pipeline (rewrite → retrieve → rerank → generate)
+      ↓
+Evaluation plan
+      ↓
+Scaling, caching, cost
+      ↓
+Security &amp; permissions
+      ↓
+Failures &amp; monitoring
+      ↓
+Trade-offs</pre>
+<h3>Estimation drill</h3>
+<pre>1M documents × 20 chunks = 20M chunks
+20M × 1024 dims × 4 bytes ≈ 80 GB (float32)
+With int8 quantization ≈ 20 GB
++ index overhead + metadata + replicas</pre>
+<ul class="cl">
+<li><label><input type="checkbox" data-i="1289"><span>Practice estimating storage, RAM, QPS, and cost for 3 different scenarios</span></label></li>
+</ul>
+<hr>
+</section>
+<section class="phase"><h1>PHASE 20 — Trade-offs<span class="pp"></span></h1>
+<p>Learn to compare:</p>
+<ul class="cl">
+<li><label><input type="checkbox" data-i="1297"><span>Naive RAG vs advanced RAG</span></label></li>
+<li><label><input type="checkbox" data-i="1298"><span>Large vs small chunks</span></label></li>
+<li><label><input type="checkbox" data-i="1299"><span>Dense vs sparse vs hybrid retrieval</span></label></li>
+<li><label><input type="checkbox" data-i="1300"><span>Reranking vs just retrieving more</span></label></li>
+<li><label><input type="checkbox" data-i="1301"><span>pgvector vs dedicated vector DB</span></label></li>
+<li><label><input type="checkbox" data-i="1302"><span>Hosted vs self-hosted embeddings</span></label></li>
+<li><label><input type="checkbox" data-i="1303"><span>Hosted vs self-hosted LLMs</span></label></li>
+<li><label><input type="checkbox" data-i="1304"><span>RAG vs fine-tuning</span></label></li>
+<li><label><input type="checkbox" data-i="1305"><span>RAG vs long context</span></label></li>
+<li><label><input type="checkbox" data-i="1306"><span>Single-pass RAG vs agentic RAG</span></label></li>
+<li><label><input type="checkbox" data-i="1307"><span>GraphRAG vs vector RAG</span></label></li>
+<li><label><input type="checkbox" data-i="1308"><span>Semantic cache vs no cache</span></label></li>
+<li><label><input type="checkbox" data-i="1309"><span>Batch ingestion vs streaming ingestion</span></label></li>
+<li><label><input type="checkbox" data-i="1310"><span>Framework vs custom pipeline</span></label></li>
+<li><label><input type="checkbox" data-i="1311"><span>LLM-as-judge vs human evaluation</span></label></li>
+<li><label><input type="checkbox" data-i="1312"><span>Accuracy vs latency vs cost</span></label></li>
+</ul>
+<h3>Rule</h3>
+<p>Never memorize:</p>
+<blockquote>"X is better than Y."</blockquote>
+<p>Instead learn:</p>
+<blockquote>"X is useful when ___, while Y is useful when ___."</blockquote>
+<hr>
+</section>
+<section class="phase"><h1>PHASE 21 — Staying Current<span class="pp"></span></h1>
+<blockquote>RAG changes fast. Don't chase every new paper; track the ideas that pass your eval set.</blockquote>
+<ul class="cl">
+<li><label><input type="checkbox" data-i="1330"><span>Follow 3–5 reliable sources (engineering blogs of model / DB / RAG tool vendors, a few researchers)</span></label></li>
+<li><label><input type="checkbox" data-i="1331"><span>Read one paper or engineering post per week</span></label></li>
+<li><label><input type="checkbox" data-i="1332"><span>Summarize it in 5 bullets</span></label></li>
+<li><label><input type="checkbox" data-i="1333"><span>Ask: "What failure of mine would this fix?"</span></label></li>
+<li><label><input type="checkbox" data-i="1334"><span>Test it on your eval set before adopting it</span></label></li>
+<li><label><input type="checkbox" data-i="1335"><span>Keep a "techniques tried" log with results</span></label></li>
+</ul>
+<h3>Key ideas worth reading the original sources for</h3>
+<ul class="cl">
+<li><label><input type="checkbox" data-i="1339"><span>RAG (original retrieval-augmented generation paper)</span></label></li>
+<li><label><input type="checkbox" data-i="1340"><span>DPR (dense passage retrieval)</span></label></li>
+<li><label><input type="checkbox" data-i="1341"><span>ColBERT</span></label></li>
+<li><label><input type="checkbox" data-i="1342"><span>HyDE</span></label></li>
+<li><label><input type="checkbox" data-i="1343"><span>Self-RAG</span></label></li>
+<li><label><input type="checkbox" data-i="1344"><span>Corrective RAG</span></label></li>
+<li><label><input type="checkbox" data-i="1345"><span>RAPTOR</span></label></li>
+<li><label><input type="checkbox" data-i="1346"><span>GraphRAG</span></label></li>
+<li><label><input type="checkbox" data-i="1347"><span>"Lost in the Middle"</span></label></li>
+<li><label><input type="checkbox" data-i="1348"><span>Contextual Retrieval (Anthropic engineering post)</span></label></li>
+<li><label><input type="checkbox" data-i="1349"><span>RAGAS</span></label></li>
+<li><label><input type="checkbox" data-i="1350"><span>ColPali (visual document retrieval)</span></label></li>
+</ul>
+<hr>
+</section>
+<section class="phase"><h1>PHASE 22 — Your RAG Notebook<span class="pp"></span></h1>
+<p>For every topic, keep ONE short note:</p>
+<pre># Topic
+
+## What is it?
+
+...
+
+## What problem does it solve?
+
+...
+
+## When should I use it?
+
+...
+
+## When should I NOT use it?
+
+...
+
+## How did it change my eval results?
+
+Before: ...
+After: ...
+
+## Cost / latency impact
+
+...
+
+## Trade-offs
+
+...
+
+## Interview explanation (60 seconds)
+
+...</pre>
+<p>Also keep an <strong>experiment log</strong>:</p>
+<pre>Date:
+Change:
+Hypothesis:
+Eval result (before → after):
+Latency / cost change:
+Keep or revert?</pre>
+<hr>
+</section>
+<section class="phase"><h1>PHASE 23 — Final Mastery Checklist<span class="pp"></span></h1>
+<h2>Foundations</h2>
+<ul class="cl">
+<li><label><input type="checkbox" data-i="1412"><span>Embeddings and similarity</span></label></li>
+<li><label><input type="checkbox" data-i="1413"><span>LLM context and tokens</span></label></li>
+<li><label><input type="checkbox" data-i="1414"><span>RAG vs fine-tuning vs long context</span></label></li>
+<li><label><input type="checkbox" data-i="1415"><span>Basic RAG pipeline</span></label></li>
+</ul>
+<h2>Data Pipeline</h2>
+<ul class="cl">
+<li><label><input type="checkbox" data-i="1419"><span>Document parsing</span></label></li>
+<li><label><input type="checkbox" data-i="1420"><span>Chunking strategies</span></label></li>
+<li><label><input type="checkbox" data-i="1421"><span>Metadata design</span></label></li>
+<li><label><input type="checkbox" data-i="1422"><span>Incremental ingestion</span></label></li>
+<li><label><input type="checkbox" data-i="1423"><span>Deletion and versioning</span></label></li>
+</ul>
+<h2>Retrieval</h2>
+<ul class="cl">
+<li><label><input type="checkbox" data-i="1427"><span>Vector search and ANN indexes</span></label></li>
+<li><label><input type="checkbox" data-i="1428"><span>BM25</span></label></li>
+<li><label><input type="checkbox" data-i="1429"><span>Hybrid search + RRF</span></label></li>
+<li><label><input type="checkbox" data-i="1430"><span>Metadata filtering</span></label></li>
+<li><label><input type="checkbox" data-i="1431"><span>Reranking</span></label></li>
+<li><label><input type="checkbox" data-i="1432"><span>Query rewriting, multi-query, HyDE</span></label></li>
+<li><label><input type="checkbox" data-i="1433"><span>Query routing</span></label></li>
+</ul>
+<h2>Generation</h2>
+<ul class="cl">
+<li><label><input type="checkbox" data-i="1437"><span>Context assembly</span></label></li>
+<li><label><input type="checkbox" data-i="1438"><span>Grounded prompting</span></label></li>
+<li><label><input type="checkbox" data-i="1439"><span>Citations</span></label></li>
+<li><label><input type="checkbox" data-i="1440"><span>Handling "I don't know"</span></label></li>
+<li><label><input type="checkbox" data-i="1441"><span>Streaming</span></label></li>
+</ul>
+<h2>Advanced</h2>
+<ul class="cl">
+<li><label><input type="checkbox" data-i="1445"><span>Parent-document retrieval</span></label></li>
+<li><label><input type="checkbox" data-i="1446"><span>Contextual retrieval</span></label></li>
+<li><label><input type="checkbox" data-i="1447"><span>Multi-vector / ColBERT-style retrieval</span></label></li>
+<li><label><input type="checkbox" data-i="1448"><span>Self-RAG / CRAG</span></label></li>
+<li><label><input type="checkbox" data-i="1449"><span>Agentic RAG</span></label></li>
+<li><label><input type="checkbox" data-i="1450"><span>GraphRAG / RAPTOR</span></label></li>
+<li><label><input type="checkbox" data-i="1451"><span>Multimodal RAG</span></label></li>
+<li><label><input type="checkbox" data-i="1452"><span>Text-to-SQL RAG</span></label></li>
+</ul>
+<h2>Evaluation</h2>
+<ul class="cl">
+<li><label><input type="checkbox" data-i="1456"><span>Retrieval metrics</span></label></li>
+<li><label><input type="checkbox" data-i="1457"><span>Faithfulness / relevance metrics</span></label></li>
+<li><label><input type="checkbox" data-i="1458"><span>Test-set creation</span></label></li>
+<li><label><input type="checkbox" data-i="1459"><span>LLM-as-judge (and its limits)</span></label></li>
+<li><label><input type="checkbox" data-i="1460"><span>Regression testing</span></label></li>
+</ul>
+<h2>Production</h2>
+<ul class="cl">
+<li><label><input type="checkbox" data-i="1464"><span>Queue-based ingestion</span></label></li>
+<li><label><input type="checkbox" data-i="1465"><span>Caching</span></label></li>
+<li><label><input type="checkbox" data-i="1466"><span>Latency budgeting</span></label></li>
+<li><label><input type="checkbox" data-i="1467"><span>Cost control</span></label></li>
+<li><label><input type="checkbox" data-i="1468"><span>Multi-tenancy and ACLs</span></label></li>
+<li><label><input type="checkbox" data-i="1469"><span>Observability and tracing</span></label></li>
+<li><label><input type="checkbox" data-i="1470"><span>Failure handling</span></label></li>
+<li><label><input type="checkbox" data-i="1471"><span>Deployment and versioning</span></label></li>
+</ul>
+<h2>Security</h2>
+<ul class="cl">
+<li><label><input type="checkbox" data-i="1475"><span>Prompt injection (direct and indirect)</span></label></li>
+<li><label><input type="checkbox" data-i="1476"><span>Data leakage prevention</span></label></li>
+<li><label><input type="checkbox" data-i="1477"><span>PII handling</span></label></li>
+<li><label><input type="checkbox" data-i="1478"><span>Guardrails</span></label></li>
+</ul>
+<hr>
+</section>
+<section class="phase"><h1>🧠 Weekly Routine<span class="pp"></span></h1>
+<p>Don't study RAG for 6 hours in one sitting. Keep it small and consistent.</p>
+<h2>Monday — Learn</h2>
+<ul class="cl">
+<li><label><input type="checkbox" data-i="1488"><span>Learn 1 concept</span></label></li>
+<li><label><input type="checkbox" data-i="1489"><span>Write 5 bullet points</span></label></li>
+<li><label><input type="checkbox" data-i="1490"><span>Explain it aloud</span></label></li>
+</ul>
+<h2>Tuesday — Build</h2>
+<ul class="cl">
+<li><label><input type="checkbox" data-i="1494"><span>Implement a tiny version in a notebook</span></label></li>
+<li><label><input type="checkbox" data-i="1495"><span>Run it on your own documents</span></label></li>
+</ul>
+<h2>Wednesday — Measure</h2>
+<ul class="cl">
+<li><label><input type="checkbox" data-i="1499"><span>Run your eval set</span></label></li>
+<li><label><input type="checkbox" data-i="1500"><span>Record the numbers</span></label></li>
+<li><label><input type="checkbox" data-i="1501"><span>Compare against the previous version</span></label></li>
+</ul>
+<h2>Thursday — Break</h2>
+<ul class="cl">
+<li><label><input type="checkbox" data-i="1505"><span>Find 5 queries where it fails</span></label></li>
+<li><label><input type="checkbox" data-i="1506"><span>Classify each failure (ingestion / retrieval / ranking / generation)</span></label></li>
+</ul>
+<h2>Friday — Review</h2>
+<ul class="cl">
+<li><label><input type="checkbox" data-i="1510"><span>Re-explain 3 concepts</span></label></li>
+<li><label><input type="checkbox" data-i="1511"><span>Update your notebook</span></label></li>
+<li><label><input type="checkbox" data-i="1512"><span>Update your experiment log</span></label></li>
+</ul>
+<h2>Weekend — Real System</h2>
+<ul class="cl">
+<li><label><input type="checkbox" data-i="1516"><span>Read one production RAG architecture post</span></label></li>
+<li><label><input type="checkbox" data-i="1517"><span>Redraw it from memory</span></label></li>
+<li><label><input type="checkbox" data-i="1518"><span>Write what you'd change and why</span></label></li>
+<li><label><input type="checkbox" data-i="1519"><span>Improve your project</span></label></li>
+</ul>
+<hr>
+</section>
+<section class="phase"><h1>🚦 The "Don't Get Lost" Rule<span class="pp"></span></h1>
+<p>If you encounter something you don't understand:</p>
+<pre>STOP
+ ↓
+Write the unknown term
+ ↓
+Learn only that term
+ ↓
+Return to the roadmap</pre>
+<p>Do <strong>not</strong> open 15 tabs and start learning every new RAG paper at once.</p>
+<hr>
+</section>
+<section class="phase"><h1>🏁 Your Definition of "Mastered"<span class="pp"></span></h1>
+<p>You don't need to know every framework or vector database.</p>
+<p>You have reached a strong RAG level when you can:</p>
+<ul class="cl">
+<li><label><input type="checkbox" data-i="1547"><span>Explain every stage of a RAG pipeline and why it exists</span></label></li>
+<li><label><input type="checkbox" data-i="1548"><span>Parse messy documents into clean, metadata-rich chunks</span></label></li>
+<li><label><input type="checkbox" data-i="1549"><span>Choose chunking, embedding, and index strategies with reasons</span></label></li>
+<li><label><input type="checkbox" data-i="1550"><span>Build hybrid retrieval with reranking</span></label></li>
+<li><label><input type="checkbox" data-i="1551"><span>Improve vague, conversational, and multi-part queries</span></label></li>
+<li><label><input type="checkbox" data-i="1552"><span>Produce grounded answers with verifiable citations</span></label></li>
+<li><label><input type="checkbox" data-i="1553"><span>Build an evaluation set and measure changes objectively</span></label></li>
+<li><label><input type="checkbox" data-i="1554"><span>Diagnose a bad answer to its exact stage (ingestion / retrieval / ranking / generation)</span></label></li>
+<li><label><input type="checkbox" data-i="1555"><span>Decide which advanced technique a given failure needs</span></label></li>
+<li><label><input type="checkbox" data-i="1556"><span>Design incremental ingestion with updates and deletions</span></label></li>
+<li><label><input type="checkbox" data-i="1557"><span>Enforce permissions at retrieval time</span></label></li>
+<li><label><input type="checkbox" data-i="1558"><span>Defend against prompt injection and data leakage</span></label></li>
+<li><label><input type="checkbox" data-i="1559"><span>Estimate storage, latency, and cost for a given scale</span></label></li>
+<li><label><input type="checkbox" data-i="1560"><span>Monitor quality in production and feed failures back into evaluation</span></label></li>
+<li><label><input type="checkbox" data-i="1561"><span>Build agentic RAG without losing control of cost and latency</span></label></li>
+<li><label><input type="checkbox" data-i="1562"><span>Defend your design decisions in an interview</span></label></li>
+</ul>
+<hr>
+</section>
+<section class="phase"><h1>⭐ The Golden Rule<span class="pp"></span></h1>
+<blockquote><strong>RAG is not about using the fanciest retriever or the newest technique.</strong><br><strong>It is about getting the right information to the model, proving the answer is grounded in it, and measuring every change.</strong></blockquote>
+<p>Start with <strong>Phase 0</strong>.</p>
+<p>Build the naive version by <strong>Phase 2</strong>.</p>
+<p>Write your eval set <strong>before</strong> you optimize anything.</p>
+<p><strong>One checkbox at a time.</strong></p>
+</section>
+</main>
+<script>
+const MD = "# RAG Roadmap\n### From Basics \u2192 Working Pipeline \u2192 Advanced Techniques \u2192 Production-Grade RAG\n\n> **Goal:** Learn Retrieval-Augmented Generation deeply enough to **build** RAG systems that work on real, messy data, **measure** whether they work, and **run** them in production.\n>\n> **Rule:** Don't try to finish everything at once. Follow the phases in order, build something small in every phase, and mark things off as you go.\n\n---\n\n## \ud83e\udded How to Use This Roadmap\n\n### The One-Topic Rule\n\n- [ ] Pick **ONE** topic\n- [ ] Learn it for **30\u201360 minutes**\n- [ ] Write a tiny explanation in your own words\n- [ ] Build or run **ONE small experiment** (a notebook cell counts)\n- [ ] Mark it complete\n- [ ] Move on\n\n### Your learning loop\n\n```text\nLEARN \u2192 EXPLAIN \u2192 BUILD \u2192 MEASURE \u2192 BREAK \u2192 IMPROVE\n```\n\nRAG is an **engineering** topic, not a theory topic. You only understand a technique when you've seen it **fix a failure** in your own pipeline.\n\n### Completion levels\n\n- [ ] \ud83d\udfe2 **Know** \u2014 I understand the concept\n- [ ] \ud83d\udfe1 **Explain** \u2014 I can explain it without notes\n- [ ] \ud83d\udd35 **Build** \u2014 I've implemented it on real data\n- [ ] \ud83d\udfe3 **Production** \u2014 I can discuss trade-offs, cost, latency, and failure modes\n\n### The most important rule of RAG\n\n```text\nDon't add a technique because it's popular.\nAdd it because your EVALUATION showed a specific failure it fixes.\n```\n\n> Build the **evaluation set early (Phase 12 basics can start in Phase 2)**. Without it, every \"improvement\" is a guess.\n\n---\n\n## \ud83d\uddfa\ufe0f The Big Picture\n\n```text\n                    OFFLINE (Ingestion)\n\u250c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2510   \u250c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2510   \u250c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2510   \u250c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2510   \u250c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2510\n\u2502 Source \u2502 \u2192 \u2502 Parse \u2502 \u2192 \u2502 Chunk \u2502 \u2192 \u2502  Embed  \u2502 \u2192 \u2502 Vector Store \u2502\n\u2502  docs  \u2502   \u2502 clean \u2502   \u2502 +meta \u2502   \u2502         \u2502   \u2502 + keyword idx\u2502\n\u2514\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2518   \u2514\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2518   \u2514\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2518   \u2514\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2518   \u2514\u2500\u2500\u2500\u2500\u2500\u2500\u252c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2518\n                                                          \u2502\n                    ONLINE (Query time)                   \u2502\n\u250c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2510   \u250c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2510   \u250c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2510   \u250c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2510       \u2502\n\u2502 Query \u2502 \u2192 \u2502 Rewrite \u2502 \u2192 \u2502 Retrieve \u2502 \u2190\u2500\u2534\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2534\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2518\n\u2514\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2518   \u2502 /route  \u2502   \u2502 (hybrid) \u2502\n            \u2514\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2518   \u2514\u2500\u2500\u2500\u2500\u252c\u2500\u2500\u2500\u2500\u2500\u2518\n                               \u2193\n                         \u250c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2510   \u250c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2510   \u250c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2510\n                         \u2502 Rerank   \u2502 \u2192 \u2502 Build    \u2502 \u2192 \u2502   LLM    \u2502 \u2192 Answer\n                         \u2502          \u2502   \u2502 context  \u2502   \u2502 + cites  \u2502   + sources\n                         \u2514\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2518   \u2514\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2518   \u2514\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2518\n\n        EVALUATION + OBSERVABILITY + SECURITY wrap around everything\n```\n\n---\n\n## \u23f1\ufe0f Suggested Timeline\n\n| Stage | Phases | Rough time (\u22481 hr/day) |\n|---|---|---|\n| Foundations | 0\u20131 | 1 week |\n| Working RAG | 2\u20137 | 3\u20134 weeks |\n| Quality | 8\u201310, 12 | 3 weeks |\n| Advanced | 11 | 3 weeks |\n| Production | 13\u201316 | 3\u20134 weeks |\n| Mastery | 17\u201322 | ongoing |\n\nDon't treat this as a deadline. It's a pacing guide.\n\n---\n\n# PHASE 0 \u2014 Prerequisites\n\n> Goal: Make sure the basics aren't slowing you down.\n\n## 0.1 Python & API Skills\n\n- [ ] Python async / await\n- [ ] Type hints and Pydantic models\n- [ ] HTTP clients (`httpx`, `requests`)\n- [ ] FastAPI basics (routes, dependencies, streaming responses)\n- [ ] Environment variables and secrets\n- [ ] Working with JSON\n- [ ] Reading and writing files (PDF, HTML, Markdown, CSV)\n- [ ] Jupyter notebooks for experiments\n- [ ] Logging\n\n## 0.2 Databases\n\n- [ ] PostgreSQL basics\n- [ ] Indexes (why they exist)\n- [ ] Full-text search basics (`tsvector`)\n- [ ] JSONB columns\n- [ ] Connection pooling\n\n## 0.3 Math You Actually Need (light)\n\n- [ ] What a vector is\n- [ ] Dot product\n- [ ] Cosine similarity\n- [ ] Euclidean (L2) distance\n- [ ] Normalization (unit vectors)\n- [ ] High-dimensional space intuition (why \"nearest\" gets tricky)\n\n### Must be able to explain\n\n- [ ] Why cosine similarity of normalized vectors = dot product\n- [ ] What \"similar\" means for two vectors\n- [ ] Why an exact nearest-neighbor search gets slow at scale\n\n## 0.4 NLP Basics\n\n- [ ] Tokens and tokenization\n- [ ] Words vs subword tokens\n- [ ] TF-IDF\n- [ ] BM25 (high-level idea)\n- [ ] Stemming / lemmatization\n- [ ] Stop words\n- [ ] Why keyword search and semantic search behave differently\n\n---\n\n# PHASE 1 \u2014 LLM Basics for RAG\n\n> Goal: Understand the model you're feeding context into, and why RAG exists.\n\n## 1.1 How LLMs Work (practical level)\n\n- [ ] Tokens\n- [ ] Context window\n- [ ] Input vs output tokens\n- [ ] Temperature\n- [ ] Top-p\n- [ ] Max output tokens\n- [ ] System prompt vs user prompt\n- [ ] Stateless API calls\n- [ ] Streaming responses\n- [ ] Structured outputs / JSON mode\n- [ ] Tool / function calling\n- [ ] Prompt caching\n- [ ] Token costs and latency\n\n## 1.2 Why RAG Exists\n\n- [ ] Knowledge cutoff\n- [ ] Hallucination\n- [ ] Private / company data\n- [ ] Data that changes frequently\n- [ ] Need for citations and traceability\n- [ ] Access control on data\n\n## 1.3 RAG vs Alternatives\n\n- [ ] RAG vs fine-tuning\n- [ ] RAG vs long-context (\"just paste everything\")\n- [ ] RAG vs prompt-only\n- [ ] RAG vs traditional search\n- [ ] RAG vs text-to-SQL / structured query\n- [ ] When to combine them\n\n```text\nFine-tuning  \u2192 changes HOW the model behaves / writes\nRAG          \u2192 changes WHAT the model knows at answer time\nLong context \u2192 works for small corpora, costs more per query\n```\n\n### Must be able to answer\n\n- [ ] When is RAG the wrong choice?\n- [ ] Why not just fine-tune on our documents?\n- [ ] Why not just put all documents in the context window?\n- [ ] Does RAG eliminate hallucinations? (No. Why not?)\n\n### Practice\n\n- [ ] Ask an LLM a question about a private doc **without** RAG \u2192 observe the failure\n- [ ] Paste the doc in the prompt manually \u2192 observe the improvement\n- [ ] Write down what \"automating that paste step\" would require\n\n---\n\n# PHASE 2 \u2014 Naive RAG (Your First Working Pipeline)\n\n> Goal: Build the simplest possible end-to-end RAG. Ugly is fine.\n\n## 2.1 The Pipeline\n\n- [ ] Load documents\n- [ ] Split into chunks\n- [ ] Embed chunks\n- [ ] Store vectors\n- [ ] Embed the query\n- [ ] Retrieve top-k similar chunks\n- [ ] Stuff chunks into a prompt\n- [ ] Generate an answer\n\n```text\nINDEX:  doc \u2192 chunks \u2192 embeddings \u2192 vector store\nQUERY:  question \u2192 embedding \u2192 top-k chunks \u2192 prompt \u2192 LLM \u2192 answer\n```\n\n## 2.2 Build It\n\n- [ ] Choose 5\u201320 documents you actually care about\n- [ ] Use a simple local vector store (Chroma / FAISS / pgvector)\n- [ ] Build it **without** a framework first (raw SDK calls)\n- [ ] Then rebuild it with LlamaIndex or LangChain and compare\n- [ ] Print the retrieved chunks for every query\n\n## 2.3 Create Your First Evaluation Set (start now)\n\n- [ ] Write 20\u201330 real questions\n- [ ] For each, write the ideal answer\n- [ ] For each, note which document/chunk contains the answer\n- [ ] Include some questions that should get \"I don't know\"\n- [ ] Include some multi-part questions\n- [ ] Include some questions with exact terms (IDs, error codes, names)\n\n### Must be able to explain\n\n- [ ] What each stage of the pipeline does\n- [ ] Why the answer is only as good as the retrieved chunks\n- [ ] The two failure types: **retrieval failure** vs **generation failure**\n\n> \ud83d\udd11 Debugging habit: when an answer is wrong, **look at the retrieved chunks first**. Most RAG bugs are retrieval bugs.\n\n---\n\n# PHASE 3 \u2014 Document Ingestion & Parsing\n\n> Goal: Get clean, structured text out of messy real-world files. This is where most production RAG quality is won or lost.\n\n## 3.1 Source Types\n\n- [ ] Plain text / Markdown\n- [ ] HTML / web pages\n- [ ] PDFs (digital)\n- [ ] PDFs (scanned)\n- [ ] Word / PowerPoint / Excel\n- [ ] Emails\n- [ ] Confluence / Notion / wiki pages\n- [ ] Slack / chat exports\n- [ ] Code repositories\n- [ ] Databases / APIs\n- [ ] Images, diagrams, charts\n- [ ] Audio / video (via transcripts)\n\n## 3.2 Parsing Problems\n\n- [ ] Multi-column layouts\n- [ ] Headers and footers repeating on every page\n- [ ] Tables (the hardest one)\n- [ ] Figures and captions\n- [ ] Footnotes\n- [ ] Reading order\n- [ ] Scanned pages \u2192 OCR\n- [ ] Broken Unicode / encoding\n- [ ] Boilerplate (nav bars, cookie banners)\n- [ ] Duplicate documents\n\n## 3.3 Tools to Try\n\n- [ ] Basic PDF text extraction (PyMuPDF / pdfplumber)\n- [ ] Layout-aware parsers (e.g., Docling, Unstructured, LlamaParse-style tools)\n- [ ] OCR (Tesseract or cloud OCR)\n- [ ] Vision-model based parsing (send page image to a multimodal LLM)\n- [ ] HTML cleaners (trafilatura, readability-style)\n\n## 3.4 Metadata (extremely important)\n\n- [ ] Source / file name / URL\n- [ ] Title\n- [ ] Section heading path (`Chapter > Section > Subsection`)\n- [ ] Page number\n- [ ] Author\n- [ ] Created / updated date\n- [ ] Document type\n- [ ] Language\n- [ ] Access permissions / tenant ID\n- [ ] Version\n\n### Practice\n\n- [ ] Parse the same PDF with 2\u20133 parsers and compare the output\n- [ ] Parse a PDF containing a table and check whether the table is still readable\n- [ ] Store metadata with every chunk\n- [ ] Show citations (file + page) in your answers\n\n---\n\n# PHASE 4 \u2014 Chunking\n\n> Goal: Split documents so each chunk is **retrievable**, **self-contained**, and **useful to the LLM**.\n\n## 4.1 Why Chunking Matters\n\n- [ ] Embedding models have input limits\n- [ ] One embedding per chunk \u2014 too big = blurry meaning, too small = no context\n- [ ] Chunk size affects retrieval precision, recall, cost, and answer quality\n\n```text\nToo small \u2192 precise match, but missing context\nToo big   \u2192 context-rich, but diluted embedding + wasted tokens\n```\n\n## 4.2 Chunking Strategies\n\n- [ ] Fixed-size chunking (characters / tokens)\n- [ ] Chunk overlap\n- [ ] Recursive character splitting\n- [ ] Sentence-based chunking\n- [ ] Paragraph-based chunking\n- [ ] Structure-aware chunking (Markdown headers, HTML tags, sections)\n- [ ] Semantic chunking (split where topic changes)\n- [ ] Code-aware chunking (functions / classes)\n- [ ] Table-aware chunking (keep tables whole, or row-wise with headers)\n- [ ] Sliding window\n- [ ] LLM-based / agentic chunking\n- [ ] Hierarchical chunking (small chunks linked to larger parents)\n\n## 4.3 Enriching Chunks\n\n- [ ] Prepend document title / section path to each chunk\n- [ ] Prepend a short LLM-generated context summary (see *Contextual Retrieval*, Phase 11)\n- [ ] Attach metadata\n- [ ] Generate hypothetical questions per chunk\n- [ ] Store a separate summary per chunk or document\n\n## 4.4 Experiments\n\n- [ ] Compare chunk sizes: 128 / 256 / 512 / 1024 tokens\n- [ ] Compare overlap: 0% / 10% / 20%\n- [ ] Compare fixed vs structure-aware chunking\n- [ ] Measure retrieval recall on your eval set for each variant\n\n### Must be able to answer\n\n- [ ] How do I choose a chunk size?\n- [ ] Why is there no universal best chunk size?\n- [ ] What breaks when a chunk splits mid-table or mid-sentence?\n- [ ] Why add the section heading to each chunk?\n\n---\n\n# PHASE 5 \u2014 Embeddings\n\n> Goal: Understand how text becomes searchable vectors and how to choose a model.\n\n## 5.1 Concepts\n\n- [ ] What an embedding is\n- [ ] Embedding dimensions\n- [ ] Semantic similarity\n- [ ] Bi-encoder vs cross-encoder\n- [ ] Symmetric vs asymmetric search (short query vs long document)\n- [ ] Query vs document prefixes / instructions (model-specific)\n- [ ] Normalization\n- [ ] Max input length and truncation\n\n## 5.2 Choosing a Model\n\n- [ ] Hosted API embeddings vs open-source models\n- [ ] Multilingual support\n- [ ] Domain fit (legal, medical, code, finance)\n- [ ] Dimension size vs storage cost\n- [ ] Latency and throughput\n- [ ] Cost per million tokens\n- [ ] Benchmark awareness (MTEB) \u2014 and why to trust **your own eval** more\n- [ ] Matryoshka embeddings (truncatable dimensions)\n- [ ] Quantized embeddings (int8 / binary) to save memory\n\n## 5.3 Operational Concerns\n\n- [ ] Batching embedding requests\n- [ ] Rate limits and retries\n- [ ] Caching embeddings\n- [ ] **Re-embedding when you change models** (everything must be re-indexed)\n- [ ] Storing the model name/version with the vectors\n- [ ] Keeping query and document models identical\n\n## 5.4 Fine-tuning Embeddings (advanced)\n\n- [ ] When generic embeddings underperform on your domain\n- [ ] Building training pairs (query, relevant chunk)\n- [ ] Hard negatives\n- [ ] Contrastive learning at a high level\n- [ ] Measuring the gain before adopting\n\n### Practice\n\n- [ ] Embed 100 chunks with 2 different models; compare retrieval on your eval set\n- [ ] Visualize embeddings (UMAP / t-SNE) to see clusters\n- [ ] Find a query where embeddings fail (exact IDs, negation, numbers)\n\n---\n\n# PHASE 6 \u2014 Vector Databases & Indexing\n\n> Goal: Understand how similarity search works at scale and which store to choose.\n\n## 6.1 Concepts\n\n- [ ] Exact nearest neighbor (brute force / flat)\n- [ ] Approximate nearest neighbor (ANN)\n- [ ] Recall vs speed vs memory trade-off\n- [ ] Distance metrics: cosine, dot product, L2\n- [ ] Metadata filtering\n- [ ] Collections / namespaces / tenants\n\n## 6.2 Index Types\n\n- [ ] Flat index\n- [ ] IVF (inverted file)\n- [ ] HNSW (graph-based) \u2014 know this one well\n- [ ] PQ (product quantization)\n- [ ] Scalar / binary quantization\n- [ ] DiskANN-style disk-based indexes\n\n### HNSW parameters to understand\n\n- [ ] `M`\n- [ ] `ef_construction`\n- [ ] `ef_search`\n- [ ] Effect on recall, latency, memory\n\n## 6.3 Vector Stores\n\n- [ ] pgvector (PostgreSQL) \u2014 natural fit if you already use Postgres\n- [ ] FAISS (library)\n- [ ] Chroma (easy local dev)\n- [ ] Qdrant\n- [ ] Weaviate\n- [ ] Milvus\n- [ ] Pinecone\n- [ ] OpenSearch / Elasticsearch (vector + keyword)\n- [ ] Redis vector search\n- [ ] MongoDB Atlas vector search\n\n## 6.4 Filtering & Multi-Tenancy\n\n- [ ] Pre-filtering vs post-filtering\n- [ ] Why post-filtering can return too few results\n- [ ] Filtering by tenant, date, doc type, permissions\n- [ ] Per-tenant collections vs shared collection + filter\n\n## 6.5 Operations\n\n- [ ] Index build time\n- [ ] Memory footprint estimation (`vectors \u00d7 dims \u00d7 bytes`)\n- [ ] Updates and deletes\n- [ ] Backups\n- [ ] Sharding and replication\n- [ ] Cost at scale\n\n### Must be able to answer\n\n- [ ] Why not just use brute-force search?\n- [ ] What does HNSW trade away for speed?\n- [ ] pgvector vs a dedicated vector DB \u2014 when does each win?\n- [ ] How much RAM do 10M vectors of 1024 dimensions need?\n\n### Practice\n\n- [ ] Store chunks in pgvector with metadata columns\n- [ ] Add an HNSW index and compare query time before/after\n- [ ] Run a filtered vector query and inspect the query plan\n\n---\n\n# PHASE 7 \u2014 Retrieval\n\n> Goal: Get the right chunks into the top results. This is the heart of RAG.\n\n## 7.1 Basic Retrieval\n\n- [ ] Top-k similarity search\n- [ ] Choosing `k`\n- [ ] Similarity score thresholds\n- [ ] \"No relevant results\" handling\n- [ ] Maximal Marginal Relevance (MMR) for diversity\n- [ ] Deduplicating near-identical chunks\n\n## 7.2 Keyword (Sparse) Retrieval\n\n- [ ] Inverted index\n- [ ] BM25\n- [ ] Why BM25 wins on exact terms (IDs, error codes, names, acronyms)\n- [ ] Learned sparse retrieval (SPLADE-style) \u2014 awareness only\n\n## 7.3 Hybrid Search (production standard)\n\n- [ ] Dense + sparse together\n- [ ] Reciprocal Rank Fusion (RRF)\n- [ ] Weighted score fusion\n- [ ] Score normalization problems\n- [ ] When hybrid beats pure vector search\n\n```text\nQuery \u2192 \u252c\u2192 Dense retrieval  (top 50) \u2500\u2510\n        \u2514\u2192 BM25 retrieval   (top 50) \u2500\u2534\u2192 Fuse (RRF) \u2192 top 20 \u2192 Rerank \u2192 top 5\n```\n\n## 7.4 Metadata & Structured Filters\n\n- [ ] Date filters (\"latest\", \"last quarter\")\n- [ ] Source / department filters\n- [ ] Permission filters\n- [ ] Self-querying retrieval (LLM converts the question into a filter + query)\n\n## 7.5 Retrieval Metrics (start measuring)\n\n- [ ] Recall@k\n- [ ] Precision@k\n- [ ] MRR\n- [ ] nDCG\n- [ ] Hit rate\n\n### Practice\n\n- [ ] Implement BM25 only, vector only, and hybrid; compare on your eval set\n- [ ] Find 5 queries where vector search fails and BM25 succeeds\n- [ ] Find 5 queries where BM25 fails and vector search succeeds\n\n---\n\n# PHASE 8 \u2014 Reranking\n\n> Goal: Retrieve broadly (high recall), then reorder precisely (high precision).\n\n## 8.1 Why Rerank\n\n- [ ] Bi-encoder retrieval is fast but coarse\n- [ ] Cross-encoders read query + chunk **together** \u2192 more accurate\n- [ ] Too-slow-to-run-on-everything, fine for top 20\u2013100\n\n```text\nRetrieve 50  \u2192  Rerank  \u2192  Keep best 5\n(cheap, recall)   (expensive, precision)\n```\n\n## 8.2 Reranker Types\n\n- [ ] Cross-encoder rerankers (open-source)\n- [ ] Hosted rerank APIs\n- [ ] LLM-as-reranker (listwise / pointwise)\n- [ ] Late-interaction models (ColBERT-style)\n- [ ] Learning-to-rank (awareness)\n\n## 8.3 Practical Concerns\n\n- [ ] Latency added by reranking\n- [ ] How many candidates to rerank\n- [ ] How many to keep after reranking\n- [ ] Max token length of the reranker\n- [ ] Cost per query\n- [ ] Combining rerank score with metadata (recency boost)\n\n### Practice\n\n- [ ] Add a reranker to your pipeline\n- [ ] Measure the change in Recall@5 / nDCG\n- [ ] Measure the added latency\n- [ ] Decide: is it worth it for your use case?\n\n---\n\n# PHASE 9 \u2014 Query Understanding & Transformation\n\n> Goal: Fix the fact that users ask bad, vague, or complex questions.\n\n## 9.1 Problems With Raw Queries\n\n- [ ] Too short (\"refund policy?\")\n- [ ] Ambiguous pronouns in chat (\"what about the second one?\")\n- [ ] Multiple questions in one\n- [ ] Different vocabulary than the documents\n- [ ] Typos\n- [ ] Questions needing several documents\n\n## 9.2 Techniques\n\n- [ ] Query rewriting / normalization\n- [ ] Conversation-aware (standalone) query rewriting\n- [ ] Multi-query generation (several rephrasings, merge results)\n- [ ] Query decomposition (split into sub-questions)\n- [ ] Step-back prompting (ask a more general question first)\n- [ ] HyDE (embed a hypothetical answer instead of the question)\n- [ ] Query expansion (synonyms, acronyms)\n- [ ] Query routing (choose which index / tool to use)\n- [ ] Intent classification (chitchat vs retrieval vs action)\n- [ ] Self-querying (extract filters)\n\n## 9.3 Routing\n\n- [ ] Route to different indexes (docs / tickets / code)\n- [ ] Route to text-to-SQL for structured questions\n- [ ] Route to web search for fresh facts\n- [ ] Route to \"no retrieval needed\"\n- [ ] Fallback behavior\n\n### Practice\n\n- [ ] Build a chat RAG that correctly handles follow-up questions\n- [ ] Add multi-query and measure the recall gain vs the extra cost\n- [ ] Add a router with 2\u20133 destinations\n\n---\n\n# PHASE 10 \u2014 Context Building & Generation\n\n> Goal: Turn retrieved chunks into **grounded, trustworthy answers**.\n\n## 10.1 Context Assembly\n\n- [ ] Ordering chunks (by score vs by document order)\n- [ ] The \"lost in the middle\" effect\n- [ ] Token budgeting\n- [ ] Merging adjacent chunks\n- [ ] Deduplication\n- [ ] Including metadata in the prompt (source, date)\n- [ ] Context compression / summarization\n- [ ] Neighbor-chunk expansion (fetch the chunks before and after)\n\n## 10.2 Prompt Design for RAG\n\n- [ ] Clear instructions: \"answer only from the provided context\"\n- [ ] \"If the answer isn't in the context, say you don't know\"\n- [ ] Delimiting context clearly (XML-style tags)\n- [ ] Citation instructions (`[1]`, `[2]`)\n- [ ] Answer format (bullets, JSON, steps)\n- [ ] Handling conflicting sources\n- [ ] Handling outdated sources\n- [ ] Tone and length control\n\n## 10.3 Grounding & Citations\n\n- [ ] Inline citations\n- [ ] Quote-then-answer pattern\n- [ ] Verifying citations actually support claims\n- [ ] Showing source snippets in the UI\n- [ ] Citation-level faithfulness checks\n\n## 10.4 Output Handling\n\n- [ ] Streaming tokens to the client\n- [ ] Structured output (JSON schema)\n- [ ] Refusals / \"I don't know\" responses\n- [ ] Follow-up suggestions\n- [ ] Feedback buttons (\ud83d\udc4d / \ud83d\udc4e)\n\n### Must be able to answer\n\n- [ ] Why does the model still hallucinate with retrieved context?\n- [ ] How do I make the model say \"I don't know\" reliably?\n- [ ] What happens when retrieved chunks contradict each other?\n- [ ] Why is more context not always better?\n\n### Practice\n\n- [ ] Add citations to your answers and click through to verify them\n- [ ] Test with questions whose answers are **not** in the corpus\n- [ ] Test with contradictory documents\n\n---\n\n# PHASE 11 \u2014 Advanced RAG Techniques\n\n> Goal: Know the techniques used in modern production systems, and **when each is justified**.\n\n> \u26a0\ufe0f Learn these only after you have an eval set and know your failure modes. Each one adds complexity and cost.\n\n## 11.1 Better Chunk Representations\n\n- [ ] **Parent-document retrieval** (embed small chunks, return the larger parent)\n- [ ] **Sentence-window retrieval** (retrieve a sentence, return surrounding window)\n- [ ] **Small-to-big retrieval**\n- [ ] **Multi-vector retrieval** (several embeddings per document: summary, questions, chunks)\n- [ ] **Hypothetical question indexing** (embed questions each chunk answers)\n- [ ] **Contextual retrieval** (LLM adds document-level context to each chunk before embedding / BM25)\n- [ ] **Late chunking** (embed full document first, then pool into chunks)\n- [ ] **Proposition-level indexing**\n\n## 11.2 Better Retrieval Models\n\n- [ ] ColBERT / late-interaction retrieval (multi-vector token embeddings)\n- [ ] Learned sparse + dense combos\n- [ ] Domain-fine-tuned embedding models\n- [ ] Instruction-tuned embeddings\n\n## 11.3 Hierarchical & Graph-Based RAG\n\n- [ ] RAPTOR (recursive summarization tree)\n- [ ] Document \u2192 section \u2192 chunk hierarchies\n- [ ] **GraphRAG** (entity / relationship graph + community summaries)\n- [ ] Knowledge graph + vector hybrid\n- [ ] Entity linking\n- [ ] When graphs help (multi-hop, \"global\" questions about a whole corpus)\n- [ ] When graphs are overkill (simple lookup questions)\n\n## 11.4 Self-Correcting & Adaptive RAG\n\n- [ ] **Self-RAG** (model decides when to retrieve and critiques its output)\n- [ ] **Corrective RAG (CRAG)** (grade retrieved docs, re-search if poor)\n- [ ] **Adaptive RAG** (choose strategy by question complexity)\n- [ ] Retrieval-grading step (is this chunk relevant?)\n- [ ] Answer-grading step (is the answer grounded?)\n- [ ] Retry loops with a cap\n- [ ] Fallback to web search\n\n## 11.5 Agentic RAG\n\n- [ ] Retrieval as a **tool** the LLM calls\n- [ ] Multi-step retrieval loops\n- [ ] Planning and decomposition\n- [ ] Multi-hop reasoning\n- [ ] Multiple tools (vector search, SQL, web, code)\n- [ ] Iterative refinement\n- [ ] Stopping conditions and step limits\n- [ ] Cost / latency control for agent loops\n- [ ] Agent observability\n\n```text\nSimple RAG:  retrieve once \u2192 answer\nAgentic RAG: think \u2192 retrieve \u2192 read \u2192 think again \u2192 retrieve more \u2192 answer\n```\n\n## 11.6 Multimodal RAG\n\n- [ ] Image embeddings (CLIP-style)\n- [ ] Page-image retrieval (embed whole page screenshots, e.g., ColPali-style)\n- [ ] Caption-then-embed approach\n- [ ] Chart and table understanding\n- [ ] Audio / video via transcripts\n- [ ] Passing images to a multimodal LLM\n\n## 11.7 Structured & Specialized RAG\n\n- [ ] Text-to-SQL RAG (schema retrieval + SQL generation + validation)\n- [ ] Table QA\n- [ ] Code RAG (repo indexing, symbol-aware chunking, AST)\n- [ ] Conversational RAG with memory\n- [ ] Personalized RAG (user-specific context)\n- [ ] Temporal RAG (freshness-aware, versioned docs)\n- [ ] Multi-lingual / cross-lingual RAG\n- [ ] Enterprise RAG over many connectors\n\n## 11.8 Context Optimization\n\n- [ ] Contextual compression (extract only relevant sentences)\n- [ ] Prompt caching for stable context\n- [ ] Context window packing\n- [ ] Long-context + RAG hybrid (retrieve broadly, let the model read a lot)\n- [ ] Citations with quote extraction\n\n### Practice\n\n- [ ] Add parent-document retrieval; measure the change\n- [ ] Add contextual retrieval to a subset of chunks; compare recall\n- [ ] Build a small corrective-RAG loop with a retry cap\n- [ ] Turn retrieval into a tool and build a simple agentic RAG\n- [ ] Try GraphRAG on a small corpus and decide whether it was worth the cost\n\n### Decision table (fill this in as you learn)\n\n| Failure you observe | Technique to try |\n|---|---|\n| Exact terms / IDs missed | Hybrid search (BM25 + dense) |\n| Right doc retrieved, wrong chunk ranked first | Reranker |\n| Chunk lacks context (\"it\", \"the company\") | Contextual retrieval, header prepending |\n| Answer needs surrounding paragraphs | Parent-document / sentence-window |\n| Vague or conversational queries | Query rewriting, multi-query |\n| Multi-part questions | Decomposition / agentic RAG |\n| \"Summarize the whole corpus\" questions | RAPTOR / GraphRAG |\n| Questions about numbers in tables | Table-aware parsing, text-to-SQL |\n| Irrelevant chunks causing hallucination | Relevance grading, thresholds, CRAG |\n| Different vocabulary than documents | HyDE, query expansion, fine-tuned embeddings |\n| Visual documents (slides, charts) | Multimodal / page-image retrieval |\n\n---\n\n# PHASE 12 \u2014 Evaluation (Critical)\n\n> Goal: Know \u2014 with numbers \u2014 whether your RAG is good, and whether changes improved it.\n\n## 12.1 Evaluate Retrieval and Generation Separately\n\n```text\nBad answer?\n   \u251c\u2500 Was the right chunk retrieved?   NO  \u2192 retrieval problem\n   \u2502                                   YES \u2192 \u2193\n   \u2514\u2500 Did the LLM use it correctly?    NO  \u2192 generation problem\n```\n\n## 12.2 Retrieval Metrics\n\n- [ ] Recall@k\n- [ ] Precision@k\n- [ ] MRR\n- [ ] nDCG\n- [ ] Hit rate\n- [ ] Context precision\n- [ ] Context recall\n\n## 12.3 Generation Metrics\n\n- [ ] **Faithfulness / groundedness** (is every claim supported by the context?)\n- [ ] **Answer relevance** (does it answer the question?)\n- [ ] **Answer correctness** (vs a reference answer)\n- [ ] Citation accuracy\n- [ ] Completeness\n- [ ] Refusal correctness (said \"I don't know\" when it should)\n- [ ] Tone / format compliance\n\n## 12.4 Building the Test Set\n\n- [ ] Real user questions (best source)\n- [ ] Questions written by domain experts\n- [ ] Synthetic questions generated from chunks by an LLM\n- [ ] Adversarial questions\n- [ ] Unanswerable questions\n- [ ] Multi-hop questions\n- [ ] Questions with exact identifiers\n- [ ] Versioned test set (don't silently change it)\n- [ ] Separate dev set and held-out set\n\n## 12.5 Evaluation Methods\n\n- [ ] LLM-as-judge (with a clear rubric)\n- [ ] Known weaknesses of LLM judges (position bias, verbosity bias, self-preference)\n- [ ] Calibrating the judge against human labels\n- [ ] Human review samples\n- [ ] Pairwise comparison (A vs B)\n- [ ] Regression tests in CI\n- [ ] Online metrics (thumbs up/down, follow-up rate, escalations)\n- [ ] A/B testing\n\n## 12.6 Tools\n\n- [ ] RAGAS\n- [ ] DeepEval\n- [ ] TruLens\n- [ ] LangSmith / Langfuse / Phoenix evaluations\n- [ ] Custom evaluation scripts (often the best option)\n\n### Practice\n\n- [ ] Build a 50-question eval set\n- [ ] Write a script that runs the pipeline and reports Recall@5 + Faithfulness\n- [ ] Change one thing (chunk size, reranker, etc.) and compare before/after\n- [ ] Label 30 judge outputs manually and see how often you agree with the LLM judge\n\n---\n\n# PHASE 13 \u2014 Production Architecture\n\n> Goal: Move from a notebook to a service that runs reliably for real users.\n\n## 13.1 Ingestion Pipeline\n\n- [ ] Connectors / crawlers for each source\n- [ ] Queue-based ingestion (workers)\n- [ ] Idempotent processing\n- [ ] Parse \u2192 chunk \u2192 embed \u2192 upsert as separate stages\n- [ ] Batch embedding\n- [ ] Retry and dead-letter handling\n- [ ] **Incremental updates** (only re-process changed documents)\n- [ ] Content hashing for change detection\n- [ ] **Deletion handling** (removed documents must disappear from the index)\n- [ ] Document versioning\n- [ ] Backfills and re-indexing\n- [ ] Blue-green index swaps (build new index, then switch)\n- [ ] Ingestion monitoring and failure alerts\n\n```text\nSource \u2192 Queue \u2192 Parser worker \u2192 Chunker \u2192 Embedder worker \u2192 Vector DB + Keyword index\n                                                  \u2193\n                                            Metadata DB (Postgres)\n```\n\n## 13.2 Query Service\n\n- [ ] FastAPI service with async I/O\n- [ ] Streaming responses (SSE / WebSocket)\n- [ ] Timeouts on every external call\n- [ ] Retries with exponential backoff and jitter\n- [ ] Circuit breakers for LLM / vector DB failures\n- [ ] Rate limiting per user / tenant\n- [ ] Request validation\n- [ ] Graceful degradation (e.g., skip rerank if it's down)\n- [ ] Fallback models / providers\n- [ ] Concurrency control\n\n## 13.3 Latency Engineering\n\n- [ ] Latency budget per stage\n\n```text\nQuery rewrite   ~300 ms\nEmbedding       ~50  ms\nRetrieval       ~50  ms\nRerank          ~200 ms\nLLM first token ~500 ms\n```\n\n- [ ] Run dense + sparse retrieval in parallel\n- [ ] Stream the answer\n- [ ] Smaller models for rewriting / routing / grading\n- [ ] Prompt caching\n- [ ] Precompute where possible\n- [ ] Time-to-first-token vs total latency\n\n## 13.4 Caching\n\n- [ ] Embedding cache\n- [ ] Retrieval-result cache\n- [ ] Exact-match response cache\n- [ ] **Semantic cache** (reuse answers for similar questions)\n- [ ] Risks of semantic caching (stale or wrong-user answers)\n- [ ] Cache invalidation when documents change\n- [ ] LLM prompt caching\n\n## 13.5 Cost Control\n\n- [ ] Cost per query breakdown (embedding, rerank, LLM input/output)\n- [ ] Smaller / cheaper models for sub-tasks\n- [ ] Reduce `k` and context size\n- [ ] Contextual compression\n- [ ] Caching\n- [ ] Batch / offline processing for ingestion\n- [ ] Quantized vectors\n- [ ] Budgets and per-tenant quotas\n- [ ] Model routing by question difficulty\n\n## 13.6 Scalability\n\n- [ ] Stateless query service (scale horizontally)\n- [ ] Vector DB sharding and replication\n- [ ] Read replicas for metadata DB\n- [ ] Autoscaling ingestion workers\n- [ ] Hot vs cold index tiers\n- [ ] Capacity planning (docs \u2192 chunks \u2192 vectors \u2192 RAM)\n- [ ] Multi-region considerations\n- [ ] Load testing\n\n## 13.7 Multi-Tenancy & Access Control\n\n- [ ] Tenant isolation strategies\n- [ ] **Permission-aware retrieval** (filter by user ACL **before** the LLM sees anything)\n- [ ] Syncing permissions from source systems\n- [ ] Handling permission changes\n- [ ] Audit logging\n- [ ] Data residency requirements\n- [ ] Per-tenant encryption / deletion\n\n> \ud83d\udd11 The model must **never** see a chunk the user isn't allowed to read. Don't rely on the prompt to enforce permissions.\n\n## 13.8 Deployment\n\n- [ ] Docker\n- [ ] CI/CD for the app **and** for eval runs\n- [ ] Environment configs\n- [ ] Secrets management\n- [ ] Feature flags for new retrieval strategies\n- [ ] Canary releases\n- [ ] Prompt and config versioning\n- [ ] Index versioning and rollback\n\n### Practice\n\n- [ ] Wrap your RAG in a FastAPI service with streaming\n- [ ] Add an ingestion worker with queue + incremental updates\n- [ ] Implement document deletion and verify it disappears from answers\n- [ ] Add per-user permission filtering and test that it can't leak\n\n---\n\n# PHASE 14 \u2014 Observability & Monitoring\n\n> Goal: See exactly what happened in every request, so you can debug and improve.\n\n## 14.1 Tracing\n\n- [ ] Trace every request end-to-end\n- [ ] Log: original query, rewritten query, retrieved chunk IDs + scores, reranked results, final prompt, answer, citations\n- [ ] Per-stage latency\n- [ ] Token usage and cost per request\n- [ ] Tools: Langfuse, LangSmith, Arize Phoenix, OpenTelemetry\n\n## 14.2 Metrics to Monitor\n\n- [ ] Latency (p50 / p95 / p99), time-to-first-token\n- [ ] Error rates (by stage)\n- [ ] Cost per query / per tenant\n- [ ] Empty-retrieval rate\n- [ ] \"I don't know\" rate\n- [ ] Average retrieval score\n- [ ] Thumbs up / down ratio\n- [ ] Citation click-through\n- [ ] Ingestion lag (how stale is the index?)\n- [ ] Failed-ingestion counts\n\n## 14.3 Feedback Loops\n\n- [ ] Collect user feedback\n- [ ] Review low-rated answers weekly\n- [ ] Turn failures into new eval-set questions\n- [ ] Identify content gaps (questions with no good documents)\n- [ ] Track drift (new topics, new document types)\n\n## 14.4 Debugging Playbook\n\n```text\n1. Open the trace for the bad answer\n2. Was the right document in the index at all?       \u2192 ingestion problem\n3. Was the right chunk retrieved in top-k?           \u2192 retrieval / chunking / embedding problem\n4. Was it ranked high enough to be included?         \u2192 rerank / k problem\n5. Was it in the final prompt?                       \u2192 context-assembly problem\n6. Did the LLM use it correctly?                     \u2192 prompt / model problem\n```\n\n### Practice\n\n- [ ] Add tracing to your pipeline\n- [ ] Debug 10 failed answers using the playbook above\n- [ ] Categorize your failures (ingestion / retrieval / ranking / generation)\n\n---\n\n# PHASE 15 \u2014 Security, Privacy & Safety\n\n> Goal: RAG connects an LLM to your data. That's a big attack surface.\n\n## 15.1 Prompt Injection\n\n- [ ] **Direct** prompt injection (user tries to override instructions)\n- [ ] **Indirect** prompt injection (malicious text hidden **inside retrieved documents**)\n- [ ] Why retrieved content must be treated as **untrusted data**\n- [ ] Delimiting and labeling retrieved content\n- [ ] Not letting retrieved text trigger tool actions without checks\n- [ ] Output filtering\n- [ ] Least-privilege tools\n\n## 15.2 Data Leakage\n\n- [ ] Cross-tenant leakage\n- [ ] Permission bypass through retrieval\n- [ ] System-prompt leakage\n- [ ] Leaking PII in answers\n- [ ] Logging sensitive content safely\n- [ ] Data retention rules\n\n## 15.3 Poisoning & Integrity\n\n- [ ] Index poisoning (bad documents added deliberately)\n- [ ] Source trust levels\n- [ ] Document provenance\n- [ ] Review process for ingested content\n\n## 15.4 PII & Compliance\n\n- [ ] PII detection and redaction before indexing\n- [ ] Encryption at rest and in transit\n- [ ] Right-to-delete (remove a user's data from index **and** caches)\n- [ ] GDPR / DPDP-style requirements (awareness)\n- [ ] Sending data to third-party LLM / embedding APIs \u2014 what's allowed?\n- [ ] Self-hosted vs hosted models for sensitive data\n\n## 15.5 Guardrails\n\n- [ ] Input guardrails (topic, abuse, injection detection)\n- [ ] Output guardrails (groundedness, toxicity, PII)\n- [ ] Scope limiting (\"only answer about X\")\n- [ ] Human escalation paths\n- [ ] Red-teaming your own system\n\n### Practice\n\n- [ ] Plant a malicious instruction inside a test document and see whether your RAG follows it\n- [ ] Test whether user A can retrieve user B's documents\n- [ ] Add a defense and re-test\n\n---\n\n# PHASE 16 \u2014 Frameworks & Tooling\n\n> Goal: Use tools wisely without becoming dependent on abstractions you don't understand.\n\n## 16.1 Frameworks\n\n- [ ] LlamaIndex (strong on ingestion / indexing / retrieval abstractions)\n- [ ] LangChain (general LLM app building)\n- [ ] LangGraph (stateful agent / workflow graphs)\n- [ ] Haystack\n- [ ] DSPy (programmatic prompt / pipeline optimization)\n- [ ] Vendor SDKs directly (often the simplest)\n\n## 16.2 Evaluating Whether to Use a Framework\n\n- [ ] What does it hide from me?\n- [ ] Can I see the exact prompts it sends?\n- [ ] Can I swap the vector DB / LLM easily?\n- [ ] Is it stable between versions?\n- [ ] Would 100 lines of my own code be clearer?\n\n## 16.3 Supporting Tools\n\n- [ ] Document parsers (Docling, Unstructured, etc.)\n- [ ] Observability (Langfuse, Phoenix)\n- [ ] Evaluation (RAGAS, DeepEval)\n- [ ] Workflow orchestration (Airflow, Prefect, Temporal) for ingestion\n- [ ] Message queues (Kafka, SQS, Celery / Redis queues)\n- [ ] Object storage for raw documents\n\n> Rule: **Build it once from scratch before using a framework.** Then you'll know what the framework is doing for you.\n\n---\n\n# PHASE 17 \u2014 Common Failure Modes\n\n> Goal: Recognize problems quickly. Most RAG pain falls into these categories.\n\n## 17.1 Ingestion Failures\n\n- [ ] Garbled PDF text\n- [ ] Tables flattened into nonsense\n- [ ] Missing pages / failed OCR\n- [ ] Duplicate documents inflating results\n- [ ] Stale documents never updated\n- [ ] Deleted documents still retrievable\n- [ ] Missing metadata\n\n## 17.2 Chunking Failures\n\n- [ ] Answer split across two chunks\n- [ ] Chunk lacks context (\"this policy\" \u2014 which policy?)\n- [ ] Chunks too large and diluted\n- [ ] Chunks too small to be meaningful\n\n## 17.3 Retrieval Failures\n\n- [ ] Exact identifiers not found (needs BM25)\n- [ ] Semantic mismatch (user vocabulary \u2260 document vocabulary)\n- [ ] Negation ignored (\"not eligible\" retrieved as \"eligible\")\n- [ ] Numbers and dates handled poorly\n- [ ] Right chunk retrieved but ranked 15th\n- [ ] Filter too aggressive \u2192 no results\n- [ ] Too many near-duplicate chunks\n\n## 17.4 Generation Failures\n\n- [ ] Hallucinating beyond the context\n- [ ] Ignoring relevant context in the middle\n- [ ] Mixing facts from different documents\n- [ ] Wrong or fabricated citations\n- [ ] Failing to say \"I don't know\"\n- [ ] Over-answering or under-answering\n- [ ] Following instructions hidden in documents\n\n## 17.5 System Failures\n\n- [ ] Slow responses\n- [ ] Cost blow-ups\n- [ ] LLM / vector DB outages\n- [ ] Rate limits during ingestion\n- [ ] Index and model version mismatches\n- [ ] Silent quality regressions after a change\n\n---\n\n# PHASE 18 \u2014 Projects (Build Ladder)\n\n> Goal: Learn by building. Do these in order, and keep each one simple.\n\n## Level 1 \u2014 Naive RAG\n\n- [ ] Q&A over a few Markdown / PDF files\n- [ ] Raw SDK calls, no framework\n- [ ] Prints retrieved chunks and sources\n\n## Level 2 \u2014 Better RAG\n\n- [ ] Structure-aware chunking with metadata\n- [ ] Hybrid search (BM25 + vectors) with RRF\n- [ ] Reranker\n- [ ] Citations\n- [ ] 50-question eval set + eval script\n\n## Level 3 \u2014 Chat RAG Service\n\n- [ ] FastAPI backend with streaming\n- [ ] Conversation-aware query rewriting\n- [ ] PostgreSQL + pgvector\n- [ ] Tracing (Langfuse / Phoenix)\n- [ ] Simple web UI or API client\n\n## Level 4 \u2014 Production-Style RAG\n\n- [ ] Queue-based ingestion with incremental updates and deletions\n- [ ] Multi-tenant, permission-aware retrieval\n- [ ] Caching + rate limiting\n- [ ] CI that runs the eval set on every change\n- [ ] Dockerized deployment\n- [ ] Cost and latency dashboard\n\n## Level 5 \u2014 Advanced RAG\n\n- [ ] Agentic RAG with retrieval + SQL + web tools\n- [ ] Contextual retrieval or parent-document retrieval\n- [ ] Corrective loop with relevance grading\n- [ ] Multimodal document support\n- [ ] Prompt-injection defenses and tests\n\n## Project Ideas (pick what you'd actually use)\n\n- [ ] Documentation assistant for an open-source project (e.g., the repo you're contributing to)\n- [ ] Chat over your own notes, resume, and project READMEs\n- [ ] Codebase Q&A assistant\n- [ ] Research-paper assistant with citations\n- [ ] Customer-support assistant over an FAQ + tickets\n- [ ] Legal / policy document assistant with strict citations\n- [ ] Text-to-SQL analytics assistant over a sample database\n- [ ] Meeting / transcript search assistant\n\n---\n\n# PHASE 19 \u2014 RAG System Design Problems\n\n> Practice explaining RAG in system-design interview format.\n\n- [ ] Design a company-wide knowledge-base assistant\n- [ ] Design a customer-support RAG chatbot\n- [ ] Design a RAG system for 10 million documents\n- [ ] Design a multi-tenant RAG SaaS\n- [ ] Design an enterprise search with per-user permissions\n- [ ] Design a code-search assistant\n- [ ] Design a legal document Q&A system\n- [ ] Design a real-time RAG system with fresh data\n- [ ] Design a multimodal document-search system\n- [ ] Design an agentic research assistant\n- [ ] Design a RAG evaluation platform\n\n### Use this framework\n\n```text\nRequirements (users, doc types, volume, freshness, accuracy, latency, privacy)\n      \u2193\nEstimates (docs \u2192 chunks \u2192 vectors \u2192 storage \u2192 QPS \u2192 cost/query)\n      \u2193\nIngestion pipeline\n      \u2193\nIndex design (vector + keyword + metadata)\n      \u2193\nQuery pipeline (rewrite \u2192 retrieve \u2192 rerank \u2192 generate)\n      \u2193\nEvaluation plan\n      \u2193\nScaling, caching, cost\n      \u2193\nSecurity & permissions\n      \u2193\nFailures & monitoring\n      \u2193\nTrade-offs\n```\n\n### Estimation drill\n\n```text\n1M documents \u00d7 20 chunks = 20M chunks\n20M \u00d7 1024 dims \u00d7 4 bytes \u2248 80 GB (float32)\nWith int8 quantization \u2248 20 GB\n+ index overhead + metadata + replicas\n```\n\n- [ ] Practice estimating storage, RAM, QPS, and cost for 3 different scenarios\n\n---\n\n# PHASE 20 \u2014 Trade-offs\n\nLearn to compare:\n\n- [ ] Naive RAG vs advanced RAG\n- [ ] Large vs small chunks\n- [ ] Dense vs sparse vs hybrid retrieval\n- [ ] Reranking vs just retrieving more\n- [ ] pgvector vs dedicated vector DB\n- [ ] Hosted vs self-hosted embeddings\n- [ ] Hosted vs self-hosted LLMs\n- [ ] RAG vs fine-tuning\n- [ ] RAG vs long context\n- [ ] Single-pass RAG vs agentic RAG\n- [ ] GraphRAG vs vector RAG\n- [ ] Semantic cache vs no cache\n- [ ] Batch ingestion vs streaming ingestion\n- [ ] Framework vs custom pipeline\n- [ ] LLM-as-judge vs human evaluation\n- [ ] Accuracy vs latency vs cost\n\n### Rule\n\nNever memorize:\n\n> \"X is better than Y.\"\n\nInstead learn:\n\n> \"X is useful when ___, while Y is useful when ___.\"\n\n---\n\n# PHASE 21 \u2014 Staying Current\n\n> RAG changes fast. Don't chase every new paper; track the ideas that pass your eval set.\n\n- [ ] Follow 3\u20135 reliable sources (engineering blogs of model / DB / RAG tool vendors, a few researchers)\n- [ ] Read one paper or engineering post per week\n- [ ] Summarize it in 5 bullets\n- [ ] Ask: \"What failure of mine would this fix?\"\n- [ ] Test it on your eval set before adopting it\n- [ ] Keep a \"techniques tried\" log with results\n\n### Key ideas worth reading the original sources for\n\n- [ ] RAG (original retrieval-augmented generation paper)\n- [ ] DPR (dense passage retrieval)\n- [ ] ColBERT\n- [ ] HyDE\n- [ ] Self-RAG\n- [ ] Corrective RAG\n- [ ] RAPTOR\n- [ ] GraphRAG\n- [ ] \"Lost in the Middle\"\n- [ ] Contextual Retrieval (Anthropic engineering post)\n- [ ] RAGAS\n- [ ] ColPali (visual document retrieval)\n\n---\n\n# PHASE 22 \u2014 Your RAG Notebook\n\nFor every topic, keep ONE short note:\n\n```markdown\n# Topic\n\n## What is it?\n\n...\n\n## What problem does it solve?\n\n...\n\n## When should I use it?\n\n...\n\n## When should I NOT use it?\n\n...\n\n## How did it change my eval results?\n\nBefore: ...\nAfter: ...\n\n## Cost / latency impact\n\n...\n\n## Trade-offs\n\n...\n\n## Interview explanation (60 seconds)\n\n...\n```\n\nAlso keep an **experiment log**:\n\n```text\nDate:\nChange:\nHypothesis:\nEval result (before \u2192 after):\nLatency / cost change:\nKeep or revert?\n```\n\n---\n\n# PHASE 23 \u2014 Final Mastery Checklist\n\n## Foundations\n\n- [ ] Embeddings and similarity\n- [ ] LLM context and tokens\n- [ ] RAG vs fine-tuning vs long context\n- [ ] Basic RAG pipeline\n\n## Data Pipeline\n\n- [ ] Document parsing\n- [ ] Chunking strategies\n- [ ] Metadata design\n- [ ] Incremental ingestion\n- [ ] Deletion and versioning\n\n## Retrieval\n\n- [ ] Vector search and ANN indexes\n- [ ] BM25\n- [ ] Hybrid search + RRF\n- [ ] Metadata filtering\n- [ ] Reranking\n- [ ] Query rewriting, multi-query, HyDE\n- [ ] Query routing\n\n## Generation\n\n- [ ] Context assembly\n- [ ] Grounded prompting\n- [ ] Citations\n- [ ] Handling \"I don't know\"\n- [ ] Streaming\n\n## Advanced\n\n- [ ] Parent-document retrieval\n- [ ] Contextual retrieval\n- [ ] Multi-vector / ColBERT-style retrieval\n- [ ] Self-RAG / CRAG\n- [ ] Agentic RAG\n- [ ] GraphRAG / RAPTOR\n- [ ] Multimodal RAG\n- [ ] Text-to-SQL RAG\n\n## Evaluation\n\n- [ ] Retrieval metrics\n- [ ] Faithfulness / relevance metrics\n- [ ] Test-set creation\n- [ ] LLM-as-judge (and its limits)\n- [ ] Regression testing\n\n## Production\n\n- [ ] Queue-based ingestion\n- [ ] Caching\n- [ ] Latency budgeting\n- [ ] Cost control\n- [ ] Multi-tenancy and ACLs\n- [ ] Observability and tracing\n- [ ] Failure handling\n- [ ] Deployment and versioning\n\n## Security\n\n- [ ] Prompt injection (direct and indirect)\n- [ ] Data leakage prevention\n- [ ] PII handling\n- [ ] Guardrails\n\n---\n\n# \ud83e\udde0 Weekly Routine\n\nDon't study RAG for 6 hours in one sitting. Keep it small and consistent.\n\n## Monday \u2014 Learn\n\n- [ ] Learn 1 concept\n- [ ] Write 5 bullet points\n- [ ] Explain it aloud\n\n## Tuesday \u2014 Build\n\n- [ ] Implement a tiny version in a notebook\n- [ ] Run it on your own documents\n\n## Wednesday \u2014 Measure\n\n- [ ] Run your eval set\n- [ ] Record the numbers\n- [ ] Compare against the previous version\n\n## Thursday \u2014 Break\n\n- [ ] Find 5 queries where it fails\n- [ ] Classify each failure (ingestion / retrieval / ranking / generation)\n\n## Friday \u2014 Review\n\n- [ ] Re-explain 3 concepts\n- [ ] Update your notebook\n- [ ] Update your experiment log\n\n## Weekend \u2014 Real System\n\n- [ ] Read one production RAG architecture post\n- [ ] Redraw it from memory\n- [ ] Write what you'd change and why\n- [ ] Improve your project\n\n---\n\n# \ud83d\udea6 The \"Don't Get Lost\" Rule\n\nIf you encounter something you don't understand:\n\n```text\nSTOP\n \u2193\nWrite the unknown term\n \u2193\nLearn only that term\n \u2193\nReturn to the roadmap\n```\n\nDo **not** open 15 tabs and start learning every new RAG paper at once.\n\n---\n\n# \ud83c\udfc1 Your Definition of \"Mastered\"\n\nYou don't need to know every framework or vector database.\n\nYou have reached a strong RAG level when you can:\n\n- [ ] Explain every stage of a RAG pipeline and why it exists\n- [ ] Parse messy documents into clean, metadata-rich chunks\n- [ ] Choose chunking, embedding, and index strategies with reasons\n- [ ] Build hybrid retrieval with reranking\n- [ ] Improve vague, conversational, and multi-part queries\n- [ ] Produce grounded answers with verifiable citations\n- [ ] Build an evaluation set and measure changes objectively\n- [ ] Diagnose a bad answer to its exact stage (ingestion / retrieval / ranking / generation)\n- [ ] Decide which advanced technique a given failure needs\n- [ ] Design incremental ingestion with updates and deletions\n- [ ] Enforce permissions at retrieval time\n- [ ] Defend against prompt injection and data leakage\n- [ ] Estimate storage, latency, and cost for a given scale\n- [ ] Monitor quality in production and feed failures back into evaluation\n- [ ] Build agentic RAG without losing control of cost and latency\n- [ ] Defend your design decisions in an interview\n\n---\n\n# \u2b50 The Golden Rule\n\n> **RAG is not about using the fanciest retriever or the newest technique.**\n>\n> **It is about getting the right information to the model, proving the answer is grounded in it, and measuring every change.**\n\nStart with **Phase 0**.\n\nBuild the naive version by **Phase 2**.\n\nWrite your eval set **before** you optimize anything.\n\n**One checkbox at a time.**\n";
+const KEY = 'rag-roadmap-tracker-v1', CAP = 400;
+const boxes = [...document.querySelectorAll('input[data-i]')];
+let state = {checked:{}, history:[], updated:0};
+try { const s = JSON.parse(localStorage.getItem(KEY)||'null'); if (s && s.checked) state = s; } catch(e){}
+const $ = id => document.getElementById(id);
+const labelOf = cb => cb.nextElementSibling.textContent.trim();
+const fmt = ts => new Date(ts).toLocaleString([], {day:'numeric',month:'short',hour:'2-digit',minute:'2-digit'});
+
+function paint(){
+  boxes.forEach(cb => cb.checked = !!state.checked[cb.dataset.i]);
+  const done = boxes.filter(b=>b.checked).length;
+  $('plbl').textContent = done + ' / ' + boxes.length + ' done (' + Math.round(100*done/boxes.length) + '%)';
+  $('pfill').style.width = (100*done/boxes.length) + '%';
+  document.querySelectorAll('.phase').forEach(p => {
+    const bs = p.querySelectorAll('input[data-i]'); const pp = p.querySelector('.pp');
+    if (pp) pp.textContent = bs.length ? [...bs].filter(b=>b.checked).length + ' / ' + bs.length : '';
+  });
+  const hl = $('hlist'); hl.textContent = '';
+  state.history.slice().reverse().slice(0,100).forEach(h => {
+    const li = document.createElement('li');
+    const t = document.createElement('span'); t.className = 't'; t.textContent = fmt(h.ts);
+    li.append(t, (h.c ? '✅ ' : '↩️ ') + h.t); hl.append(li);
+  });
+  $('hcount').textContent = '(' + state.history.length + ' clicks' + (state.history.length>100 ? ', latest 100 shown' : '') + ')';
+}
+let remote = null, timer = null;
+function save(){
+  state.updated = Date.now();
+  try { localStorage.setItem(KEY, JSON.stringify(state)); } catch(e){}
+  clearTimeout(timer);
+  timer = setTimeout(async () => { if (remote) { try { await remote.set(state); } catch(e){} } }, 800);
+}
+boxes.forEach(cb => cb.addEventListener('change', () => {
+  const i = cb.dataset.i, ts = Date.now();
+  if (cb.checked) state.checked[i] = ts; else delete state.checked[i];
+  state.history.push({id:+i, t:labelOf(cb).slice(0,120), c:cb.checked, ts});
+  if (state.history.length > CAP) state.history = state.history.slice(-CAP);
+  save(); paint();
+}));
+$('bhist').onclick = () => $('hist').classList.toggle('on');
+$('breset').onclick = () => {
+  if (!confirm('Clear ALL checkmarks and click history?')) return;
+  state = {checked:{}, history:[], updated:Date.now()}; save(); paint();
+};
+function buildMd(){
+  const L = MD.split('\n');
+  Object.keys(state.checked).forEach(i => { L[i] = L[i].replace('- [ ]', '- [x]'); });
+  let s = L.join('\n').replace(/\s+$/,'') + '\n\n---\n\n# 📜 Progress History\n\n';
+  const done = Object.keys(state.checked).length;
+  s += `**Progress:** ${done} / ${boxes.length} items checked.\n\n`;
+  if (!state.history.length) s += '_No clicks recorded yet._\n';
+  state.history.slice().reverse().forEach(h => {
+    s += `- ${new Date(h.ts).toISOString().slice(0,16).replace('T',' ')} UTC — ${h.c ? '✅ checked' : '↩️ unchecked'}: ${h.t}\n`;
+  });
+  return s;
+}
+$('bdl').onclick = async () => {
+  const data = buildMd();
+  try {
+    const d = await (window.claude && claude.use ? claude.use('downloads') : null);
+    if (d) { await d.save({filename:'RAG_ROADMAP.md', data}); return; }
+  } catch(e){ if (e && e.code === 'declined') return; }
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(new Blob([data], {type:'text/markdown'})); a.download = 'RAG_ROADMAP.md'; a.click();
+};
+paint();
+(async () => {
+  try {
+    if (!(window.claude && claude.use)) return;
+    const [db, user] = await Promise.all([claude.use('db'), claude.use('user')]);
+    if (!db || !user) { $('note').textContent = 'Saved in this browser only.'; return; }
+    const id = await user.id(); if (!id) { $('note').textContent = 'Saved in this browser only.'; return; }
+    remote = db.doc('data/users/' + id + '/roadmap');
+    const snap = await remote.get(); const r = snap.exists ? snap.data() : null;
+    if (r && r.checked && (r.updated||0) > (state.updated||0)) {
+      state = {checked:r.checked, history:r.history||[], updated:r.updated};
+      try { localStorage.setItem(KEY, JSON.stringify(state)); } catch(e){}
+      paint();
+    } else if (state.updated) { await remote.set(state); }
+  } catch(e){ remote = null; $('note').textContent = 'Saved in this browser only.'; }
+})();
+</script>
+</body>
+</html>
