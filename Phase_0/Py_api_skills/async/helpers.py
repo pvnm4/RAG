@@ -18,6 +18,6 @@ class Timer:
         return self
 
     def __exit__(self, *exc):
-        print(f" [{self.label}] {time.perf_counter() - self.start:.2f}s")
+        print(f" {self.label} {time.perf_counter() - self.start:.2f}s")
 
         
