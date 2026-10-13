@@ -3,9 +3,11 @@ import time
 
 async def fake_call(name: str, delay: float = 0.5, fail: bool = False) -> str:
     """simulates a network call (embedding api, vector DB, LLM...)"""
+    print(f"{name}: started")
     await asyncio.sleep(delay)
     if fail:
         raise RuntimeError(f"{name} failed")
+    print(f"{name}: completed")
     return f"{name} ok"
 
 class Timer:
